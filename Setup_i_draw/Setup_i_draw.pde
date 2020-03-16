@@ -6,7 +6,7 @@ float x1, y1, vx1, vy1, x2, y2, vx2, vy2;
 float m1, m2, t1, t2;
 float incremento_t;
 
-//ESTE COMENTARIO ES DE PRUEBA
+//ESTE COMENTARIO
 
 //SETUP
 void setup()
