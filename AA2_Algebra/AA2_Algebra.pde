@@ -1,3 +1,5 @@
+//import peasy.*;
+
 // Un generador de intenciones
 // Una simulacion automatica de avatares
 // Hueristicas de moviminetos
@@ -14,13 +16,19 @@
     float inc_t;
     //Posiciones de la meta y el avatar lider
     PVector pos_meta, pos_lider;
+    //PeasyCam cam;
 
 //Zona de SetUp
 void setup()
 {
    size(640,380,P3D);
+   /*
+   cam = new PeasyCam(this, 640);
+   cam.setMinimumDistance(50);
+   cam.setMaximumDistance(500);
+   */
    background(255);
-   lights();
+   //lights();
    // LLamo a los constructores de las particulas
    // Lider
    particulaArray[0] = new particula(new PVector (0.0,0.0,0.0),new PVector (0.0,0.0,0.0), 1.0, 20.0, color(255,255,0),1);
@@ -36,9 +44,9 @@ void setup()
    }
    //Inicializar ciertos valores
    
-   pos_meta = new PVector(width/2, height/2, -50.0);
+   pos_meta = new PVector(width/2, height/2, 0);
    pos_lider = new PVector(0.0,0.0,0.0);
-   inc_t = 0.1;
+   inc_t = 0.5;
 }
 //Zona de Draw
 void draw()
@@ -52,7 +60,7 @@ void draw()
   // Render de la escena (Calcular posiciones primero para pintar despues)
   
   //isometricViewOn();
-  pintar_la_meta();
+  
   for (int i = 0; i<10; i++) /////////////////////////////////////////////////////////
   {
       // Calcular
@@ -60,5 +68,7 @@ void draw()
       // Dibujar
       particulaArray[i].pintate();
   }
+  pintar_la_meta();
+  collisionCircleRectangle();
   //isometricViewOff();
 }
