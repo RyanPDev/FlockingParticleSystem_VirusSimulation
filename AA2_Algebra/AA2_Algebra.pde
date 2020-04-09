@@ -35,7 +35,7 @@ import peasy.*;
      boolean cameraFollowGoal = false;
      boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
      
-     
+     boolean showControls;
      float goalSize; // Tamaño del cubo que es la meta
 
 //Zona de SetUp
@@ -83,6 +83,8 @@ void setup()
    isPaused = false;
    gamePhase = Phase.SIMULATION;
    
+   showControls = false;
+   
    goalSize = 30;
    
 }
@@ -90,7 +92,7 @@ void setup()
 void draw()
 {
   
-  
+    
     background(255);
     drawWorldBoundaries(); // DIBUJA EL CUBO QUE REPRESENTA LOS LIMITES DEL MUNDO
     //pintarSuelo();
@@ -110,7 +112,7 @@ void draw()
     pintar_la_meta();
     collisionCircleRectangle();
     
-  
-  
+    drawHUD();
+    
   
 }
