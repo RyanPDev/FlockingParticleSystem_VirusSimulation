@@ -21,7 +21,7 @@ class particula {
       rotation = new PVector(35.26,-45,0);
       //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
       KL = 0.45; // Lider
-      KB = 0.0; // Bandada
+      KB = 0.5; // Bandada
       KM = 0.5;  // Meta
       
       if(lider == 1)
