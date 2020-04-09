@@ -23,6 +23,46 @@ PVector calcula_vector_unitario(PVector pos1, PVector pos2)
   return vector_calculado;
 }
 
+
+PVector calculateAvatarVector(int id)
+{
+    PVector vector_calculado;
+    vector_calculado = new PVector(0.0,0.0,0.0);
+  
+    //Se suman las posiciones de todos los avatares
+    if(id != particulaArray.length)
+    {
+      for (int i = id+1; i < particulaArray.length; i++) /////////////////////////////////////////////////////////
+      {
+          float vector = particulaArray[id].pos.x - particulaArray[i].pos.x;
+          
+          if(vector!=0)
+          {
+            if (sqrt(sq(vector)) < 30)
+            {
+                  vector_calculado.x += particulaArray[id].pos.x - particulaArray[i].pos.x;
+                  vector_calculado.y += particulaArray[id].pos.y - particulaArray[i].pos.y;
+                  vector_calculado.z += particulaArray[id].pos.z - particulaArray[i].pos.z;
+                  float modulo = sqrt(sq(vector_calculado.x)+sq(vector_calculado.y)+sq(vector_calculado.z));
+  
+                  // Se divide cada componente o coordenada del vector por el modulo para
+                  // hacerlo unitario
+                  
+                  vector_calculado.x /= modulo;
+                  vector_calculado.y /= modulo;
+                  vector_calculado.z /= modulo;
+            }
+          }
+      }
+    }
+  
+  //Se dividen esa suma por el total de avatares que haya
+    
+     
+  return vector_calculado;
+}
+
+
 PVector dime_centro_bandada() // Promedio entre todos los avatares
 {
   PVector vector_calculado;

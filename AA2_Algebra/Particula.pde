@@ -2,15 +2,16 @@
 class particula {
  
   PVector pos,vel,rotation;
+  int idNumber;
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
-  float masa, tamanyo, KL,KB,KM; 
+  float masa, tamanyo, KL,KB,KM,KA; 
   color color_p;
   int lider; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
   float limiteDeVelocidad = 5;
   
-  particula(PVector p, PVector v, float m, float t, color c, int l)
+  particula(PVector p, PVector v, float m, float t, color c, int l, int id)
   {
       pos = p;
       vel = v;
@@ -18,11 +19,13 @@ class particula {
       tamanyo = t;
       color_p = c;
       lider = l;
+      id = idNumber;
       rotation = new PVector(35.26,-45,0);
       //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
       KL = 0.45; // Lider
-      KB = 0.5; // Bandada
+      KB = 0.05; // Bandada
       KM = 0.5;  // Meta
+      KA = 0.0; // MIENTRAS ESTO SEA 0 NO VA A AFECTAR NADA EN EL CODIGO, esto es lo de que los pajaros se alejen
       
       if(lider == 1)
       {
@@ -34,12 +37,12 @@ class particula {
   void muevete() //SOLVER (motor de inferencia numerica) Empleamos un EULER
   {
     // 1- Fuerza y Aceleracion
-    PVector acel, vector_meta, vector_lider, vector_bandada;
+    PVector acel, vector_meta, vector_lider, vector_bandada, vectorAvatar;
     acel = new PVector(0.0,0.0,0.0);
     vector_meta = new PVector(0.0,0.0,0.0);
     vector_lider = new PVector(0.0,0.0,0.0);
     vector_bandada = new PVector(0.0,0.0,0.0);
-    
+    vectorAvatar = new PVector(0.0,0.0,0.0);
     //Si soy lider voy a la meta
     if(lider==1)
     {
@@ -58,11 +61,12 @@ class particula {
       
       vector_bandada = calcula_vector_unitario(pos, dime_centro_bandada()); //promedio de posiciones de avatares
       
+      vectorAvatar = calculateAvatarVector(idNumber);
       // MEDIA PONDERADA
       
-      acel.x += KM * vector_meta.x + KL * vector_lider.x + KB * vector_bandada.x;
-      acel.y += KM * vector_meta.y + KL * vector_lider.y + KB * vector_bandada.y;
-      acel.z += KM * vector_meta.z + KL * vector_lider.z + KB * vector_bandada.z;
+      acel.x += KM * vector_meta.x + KL * vector_lider.x + KB * vector_bandada.x + KA * vectorAvatar.x;
+      acel.y += KM * vector_meta.y + KL * vector_lider.y + KB * vector_bandada.y + KA * vectorAvatar.y;
+      acel.z += KM * vector_meta.z + KL * vector_lider.z + KB * vector_bandada.z + KA * vectorAvatar.z;
       
     }
     // NEWTON Suma Fuerzas = masa x Aceleracion
