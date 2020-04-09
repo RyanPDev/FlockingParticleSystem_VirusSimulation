@@ -59,7 +59,7 @@ void setup()
    //lights();
    // LLamo a los constructores de las particulas
    // Lider
-   particulaArray[0] = new particula(new PVector (0.0,0.0,0.0),new PVector (0.0,0.0,0.0), 1.0, 20.0, color(255,255,0),1);
+   particulaArray[0] = new particula(new PVector (0.0,0.0,0.0),new PVector (0.0,0.0,0.0), 1.0, 20.0, color(255,255,0),1,0);
    // Avatares
    for (int i = 1; i < 10; i++)
    {
@@ -70,7 +70,7 @@ void setup()
      1.0, 
      random(5.0,15.0), 
      color(0,random(255),0),
-     0);
+     0,i);
    }
    //Inicializar ciertos valores
    
