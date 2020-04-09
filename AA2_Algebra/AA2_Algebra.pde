@@ -16,11 +16,10 @@ import peasy.*;
     float inc_t;
     //Posiciones de la meta y el avatar lider
     PVector pos_meta, pos_lider;
-    PeasyCam cam;
     
-    long animationTimeInMillis;
+   
     
-    // DEBERIA SER UN PVector worldBoundary y no 3 floats, que soy imbecil y me da palo cambiar todo el codigo;
+    // DEBERIA SER UN PVector worldBoundary y no 3 floats, que soy imbecil y me da palo cambiar todo el codigo, de momento no lo cambies, ya encontrare el momento;
     float worldBoundaryX;
     float worldBoundaryY;
     float worldBoundaryZ;
@@ -29,19 +28,20 @@ import peasy.*;
      Phase gamePhase; // La fase actual en la que se encuentra el juego
      Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encuentra cuando le da al pause
      
-     
-     enum CamPhase {CENTERWORLD, GOAL, LEADER}; // Enumerador con los diferentes estados de la partida
-     CamPhase cameraPhase; // La fase actual en la que se encuentra el juego
+     PeasyCam cam;
+     long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
+     enum CamPhase {CENTERWORLD, GOAL, LEADER}; // Enumerador con los diferentes estados de la camara
+     CamPhase cameraPhase; // La fase actual de la camara en la que se encuentra el juego
      boolean cameraFollowGoal = false;
      boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
      
      
-     float goalSize;
+     float goalSize; // Tamaño del cubo que es la meta
 
 //Zona de SetUp
 void setup()
 {
-   gamePhase = Phase.STARTING;
+   gamePhase = Phase.STARTING; // DE MOMENTO NO TIENE USO COMO TAL, PERO PUEDE LLEGAR A TENERLO
    size(1000,700,P3D);
    
    worldBoundaryX = 400;
@@ -92,11 +92,11 @@ void draw()
   
   
     background(255);
-    drawWorldBoundaries();
+    drawWorldBoundaries(); // DIBUJA EL CUBO QUE REPRESENTA LOS LIMITES DEL MUNDO
     //pintarSuelo();
     // Render de la escena (Calcular posiciones primero para pintar despues)
     
-    //isometricViewOn();
+    
     for (int i = 0; i<10; i++) /////////////////////////////////////////////////////////
     {
         // Calcular
@@ -109,7 +109,7 @@ void draw()
     }
     pintar_la_meta();
     collisionCircleRectangle();
-    //isometricViewOff();
+    
   
   
   

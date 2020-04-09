@@ -4,7 +4,9 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       {
           if(!isPaused)
           {
-              pauseGame();
+              isPaused = true;
+              auxiliarPhase = gamePhase;
+              gamePhase = Phase.PAUSE; 
           }
           else if(isPaused)
           {
@@ -33,13 +35,11 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
 
 
 
-void pauseGame() // Funcion que pausa el juego
+void pauseGame() // Funcion que pausa el juego LA USAREMOS LUEGO PARA METER UN TEXTO DE PAUSA EN ALGUN LUGAR USANDO UN HUD -NO BORRES ESTO-
 {
       /*textSize(50);
       textAlign(CENTER);
       fill(255);
       text("PAUSE", (width / 2), height / 2);*/
-      isPaused = true;
-      auxiliarPhase = gamePhase;
-      gamePhase = Phase.PAUSE; 
+      
 }

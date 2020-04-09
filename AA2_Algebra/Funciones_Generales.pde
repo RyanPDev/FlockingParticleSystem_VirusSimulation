@@ -1,4 +1,4 @@
-void pintar_la_meta()
+void pintar_la_meta() // pinta la meta
 {
    pushMatrix();
    translate(pos_meta.x + (goalSize / 2), pos_meta.y + (goalSize / 2), pos_meta.z + (goalSize / 2));
@@ -11,7 +11,7 @@ void pintar_la_meta()
    popMatrix();
 }
 
-void drawWorldBoundaries()
+void drawWorldBoundaries() //Dibuja el cubo de los limites
 {
    pushMatrix();
    translate(0,0,0);
@@ -31,7 +31,7 @@ void drawWorldBoundaries()
 }
 
 
-void updateCameraLookAt()
+void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 {
   if(cameraPhase == CamPhase.GOAL)
   {
@@ -70,7 +70,7 @@ void collisionCircleRectangle() {
   if (distance <= 25)
   {
     randomMetaPosition();
-    if(cameraFollowGoal)
+    if(cameraFollowGoal) // Si la camara deberia seguir a la meta
     {
         updateCameraLookAt();
     }
@@ -78,7 +78,7 @@ void collisionCircleRectangle() {
   
 }
 
-void randomMetaPosition()
+void randomMetaPosition() // Mueve la meta a una posicion random dentro del cubo
 {
  pos_meta.x = random(0,worldBoundaryX);
  pos_meta.y = random(0,worldBoundaryY);
