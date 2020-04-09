@@ -18,11 +18,11 @@ class particula {
       tamanyo = t;
       color_p = c;
       lider = l;
-      rotation= new PVector(35.26,-45,0);
+      rotation = new PVector(35.26,-45,0);
       //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
-      KL = random(0,1); // Lider
-      KB = random(KL,1); // Bandada
-      KM = 1-KB;  // Meta
+      KL = 0.45; // Lider
+      KB = 0.0; // Bandada
+      KM = 0.5;  // Meta
       
       if(lider == 1)
       {
@@ -48,9 +48,6 @@ class particula {
       acel.x += KM * vector_meta.x;
       acel.y += KM * vector_meta.y;
       acel.z += KM * vector_meta.z;
-      
-      
-      
     }
     else // sino voy a seguir al lider y a ir a la meta y no alejarme de la bandada
     {
@@ -104,7 +101,7 @@ class particula {
        vel.z = -limiteDeVelocidad; 
     }
     
-    println(vel.x,vel.y,vel.z);
+    println(pos_lider.x,pos_lider.y,pos_lider.z);
     
     
     // 3- Posicion
@@ -119,11 +116,8 @@ class particula {
        pos_lider.x = pos.x;
        pos_lider.y = pos.y; 
        pos_lider.z = pos.z; 
-    }
-    
+    }    
   }
-  
-  
   
   
   void pintate()
