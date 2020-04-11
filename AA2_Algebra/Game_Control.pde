@@ -39,8 +39,6 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   }
 }
 
-
-
 void drawHUD() // Funcion que pone el mensaje
 {
 

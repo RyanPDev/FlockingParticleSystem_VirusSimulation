@@ -6,11 +6,11 @@ class particula {
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
-  float masa, tamanyo, KL, KB, KM, KA, KR; 
-  color color_p;
-  PVector vectorAleatorio;
-  int lider; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
-  float limiteDeVelocidad = 2.5;
+  float mass, size, KL, KB, KM, KA, KR; 
+  color colorP;
+  PVector randomMovementPosition;
+  int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
+  float speedLimit = 2.5;
 
   float randomConstantCurrentTime;
   float randomConstantTotalTime;
@@ -19,10 +19,10 @@ class particula {
   {
     pos = p;
     vel = v;
-    masa = m;
-    tamanyo = t;
-    color_p = c;
-    lider = l;
+    mass = m;
+    size = t;
+    colorP = c;
+    leader = l;
     idNumber = id;
     rotation = new PVector(35.26, -45, 0);
     //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
@@ -32,65 +32,64 @@ class particula {
 
     KA = 0.0; // MIENTRAS ESTO SEA 0 NO VA A AFECTAR NADA EN EL CODIGO, esto es lo de que los pajaros se alejen
 
-    vectorAleatorio = new PVector(0, 0, 0);
+    randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
     randomConstantTotalTime = 5000; // 5 segundos
-    if (lider == 1)
+    if (leader == 1)
     {
-      limiteDeVelocidad = limiteDeVelocidad*2;
+      speedLimit = speedLimit*2;
       KR = 0.35;
       KM = 1- KR;
-      liderSize = t;
+      leaderSize = t;
     }
   }
   // METODOS
-  void muevete() //SOLVER (motor de inferencia numerica) Empleamos un EULER
+  void move() //SOLVER (motor de inferencia numerica) Empleamos un EULER
   {
     // 1- Fuerza y Aceleracion
-    PVector acel, vector_meta, vector_lider, vector_bandada, vectorAvatar, vectorRandom;
+    PVector acel, goalVector, leaderVector, flockVector, getAwayVector, randomVector;
     acel = new PVector(0.0, 0.0, 0.0);
-    vector_meta = new PVector(0.0, 0.0, 0.0);
-    vector_lider = new PVector(0.0, 0.0, 0.0);
-    vector_bandada = new PVector(0.0, 0.0, 0.0);
-    vectorAvatar = new PVector(0.0, 0.0, 0.0);
-    vectorRandom = new PVector(0.0, 0.0, 0.0);
+    goalVector = new PVector(0.0, 0.0, 0.0);
+    leaderVector = new PVector(0.0, 0.0, 0.0);
+    flockVector = new PVector(0.0, 0.0, 0.0);
+    getAwayVector = new PVector(0.0, 0.0, 0.0);
+    randomVector = new PVector(0.0, 0.0, 0.0);
     //Si soy lider voy a la meta
 
 
-    if (lider==1)
+    if (leader==1)
     {
 
-      vectorAleatorio = randomMovement(vectorAleatorio);
+      randomMovementPosition = randomMovementDirection(randomMovementPosition);
 
-      vectorRandom = calcula_vector_unitario(pos, vectorAleatorio);
-      vector_meta = calcula_vector_unitario(pos, pos_meta);
+      randomVector = calculateUnitVector(pos, randomMovementPosition);
+      goalVector = calculateUnitVector(pos, posGoal);
 
 
-      acel.x += KM * vector_meta.x + KR * vectorRandom.x;
-      acel.y += KM * vector_meta.y + KR * vectorRandom.y;
-      acel.z += KM * vector_meta.z + KR * vectorRandom.z;
+      acel.x += KM * goalVector.x + KR * randomVector.x;
+      acel.y += KM * goalVector.y + KR * randomVector.y;
+      acel.z += KM * goalVector.z + KR * randomVector.z;
     } else // sino voy a seguir al lider y a ir a la meta y no alejarme de la bandada
     {
-      randomConstant();
+      randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
 
+      goalVector = calculateUnitVector(pos, posGoal);
 
-      vector_meta = calcula_vector_unitario(pos, pos_meta);
+      leaderVector = calculateUnitVector(pos, posLeader);
 
-      vector_lider = calcula_vector_unitario(pos, pos_lider);
+      flockVector = calculateUnitVector(pos, calculateFlockCenter()); //promedio de posiciones de avatares
 
-      vector_bandada = calcula_vector_unitario(pos, dime_centro_bandada()); //promedio de posiciones de avatares
-
-      vectorAvatar = calculateAvatarVector(idNumber);
+      getAwayVector = calculateAvatarVector(idNumber);
       // MEDIA PONDERADA
 
-      acel.x += KM * vector_meta.x + KL * vector_lider.x + KB * vector_bandada.x + KA * vectorAvatar.x;
-      acel.y += KM * vector_meta.y + KL * vector_lider.y + KB * vector_bandada.y + KA * vectorAvatar.y;
-      acel.z += KM * vector_meta.z + KL * vector_lider.z + KB * vector_bandada.z + KA * vectorAvatar.z;
+      acel.x += KM * goalVector.x + KL * leaderVector.x + KB * flockVector.x + KA * getAwayVector.x;
+      acel.y += KM * goalVector.y + KL * leaderVector.y + KB * flockVector.y + KA * getAwayVector.y;
+      acel.z += KM * goalVector.z + KL * leaderVector.z + KB * flockVector.z + KA * getAwayVector.z;
     }
     // NEWTON Suma Fuerzas = masa x Aceleracion
-    acel.x /= masa;
-    acel.y /= masa;
-    acel.z /= masa;
+    acel.x /= mass;
+    acel.y /= mass;
+    acel.z /= mass;
 
     // 2- Velocidad
 
@@ -98,26 +97,26 @@ class particula {
     vel.y = vel.y + acel.y * inc_t;
     vel.z = vel.z + acel.z * inc_t;
 
-    if (vel.x > limiteDeVelocidad)
+    if (vel.x > speedLimit)
     {
-      vel.x = limiteDeVelocidad;
-    } else if (vel.x < -limiteDeVelocidad)
+      vel.x = speedLimit;
+    } else if (vel.x < -speedLimit)
     {
-      vel.x = -limiteDeVelocidad;
+      vel.x = -speedLimit;
     }
-    if (vel.y > limiteDeVelocidad)
+    if (vel.y > speedLimit)
     {
-      vel.y = limiteDeVelocidad;
-    } else if (vel.y < -limiteDeVelocidad)
+      vel.y = speedLimit;
+    } else if (vel.y < -speedLimit)
     {
-      vel.y = -limiteDeVelocidad;
+      vel.y = -speedLimit;
     }
-    if (vel.z > limiteDeVelocidad)
+    if (vel.z > speedLimit)
     {
-      vel.z = limiteDeVelocidad;
-    } else if (vel.z < -limiteDeVelocidad)
+      vel.z = speedLimit;
+    } else if (vel.z < -speedLimit)
     {
-      vel.z = -limiteDeVelocidad;
+      vel.z = -speedLimit;
     }
 
     //println(pos_lider.x,pos_lider.y,pos_lider.z);
@@ -130,18 +129,18 @@ class particula {
     pos.z = pos.z + vel.z * inc_t;
 
     //salvar posicion lider
-    if (lider == 1)
+    if (leader == 1)
     {
-      pos_lider.x = pos.x;
-      pos_lider.y = pos.y; 
-      pos_lider.z = pos.z;
+      posLeader.x = pos.x;
+      posLeader.y = pos.y; 
+      posLeader.z = pos.z;
     }
   }
 
-  void pintar_la_Random() // pinta la meta
+  void drawRandomDirection() // pinta la meta
   {
     pushMatrix();
-    translate(pos_meta.x + (goalSize / 2), pos_meta.y + (goalSize / 2), pos_meta.z + (goalSize / 2));
+    translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
     rotateX(radians(-35.26));
     rotateY(radians(-45));
     strokeWeight(8);
@@ -169,7 +168,7 @@ class particula {
     }
   }
 
-  void pintate()
+  void drawParticle()
   {
 
     pushMatrix(); // Salvo el estado
@@ -184,10 +183,10 @@ class particula {
 
     //fill(color_p);
     noFill();
-    stroke(color_p);
+    stroke(colorP);
     strokeWeight(1);
 
-    sphere(tamanyo);
+    sphere(size);
 /*
     strokeWeight(5);
     //Eje X
