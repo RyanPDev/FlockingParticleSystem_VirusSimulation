@@ -40,7 +40,7 @@ class particula {
       limiteDeVelocidad = limiteDeVelocidad*2;
       KR = 0.35;
       KM = 1- KR;
-      liderSize = t;
+      leaderSize = t;
     }
   }
   // METODOS
@@ -63,7 +63,7 @@ class particula {
       vectorAleatorio = randomMovement(vectorAleatorio);
 
       vectorRandom = calcula_vector_unitario(pos, vectorAleatorio);
-      vector_meta = calcula_vector_unitario(pos, pos_meta);
+      vector_meta = calcula_vector_unitario(pos, posGoal);
 
 
       acel.x += KM * vector_meta.x + KR * vectorRandom.x;
@@ -74,9 +74,9 @@ class particula {
       randomConstant();
 
 
-      vector_meta = calcula_vector_unitario(pos, pos_meta);
+      vector_meta = calcula_vector_unitario(pos, posGoal);
 
-      vector_lider = calcula_vector_unitario(pos, pos_lider);
+      vector_lider = calcula_vector_unitario(pos, posLeader);
 
       vector_bandada = calcula_vector_unitario(pos, dime_centro_bandada()); //promedio de posiciones de avatares
 
@@ -132,16 +132,16 @@ class particula {
     //salvar posicion lider
     if (lider == 1)
     {
-      pos_lider.x = pos.x;
-      pos_lider.y = pos.y; 
-      pos_lider.z = pos.z;
+      posLeader.x = pos.x;
+      posLeader.y = pos.y; 
+      posLeader.z = pos.z;
     }
   }
 
   void pintar_la_Random() // pinta la meta
   {
     pushMatrix();
-    translate(pos_meta.x + (goalSize / 2), pos_meta.y + (goalSize / 2), pos_meta.z + (goalSize / 2));
+    translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
     rotateX(radians(-35.26));
     rotateY(radians(-45));
     strokeWeight(8);

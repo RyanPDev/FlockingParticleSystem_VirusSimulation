@@ -1,7 +1,7 @@
 void pintar_la_meta() // pinta la meta
 {
   pushMatrix();
-  translate(pos_meta.x + (goalSize / 2), pos_meta.y + (goalSize / 2), pos_meta.z + (goalSize / 2));
+  translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
   rotateX(radians(-35.26));
   rotateY(radians(-45));
   strokeWeight(8);
@@ -34,7 +34,7 @@ void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 {
   if (cameraPhase == CamPhase.GOAL)
   {
-    cam.lookAt(pos_meta.x, pos_meta.y, pos_meta.z, animationTimeInMillis);
+    cam.lookAt(posGoal.x, posGoal.y, posGoal.z, animationTimeInMillis);
   } else if (cameraPhase == CamPhase.CENTERWORLD)
   {
     cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
@@ -43,31 +43,31 @@ void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 
 
 void collisionCircleRectangle() {
-  float newX = pos_lider.x;
-  float newY = pos_lider.y;
-  float newZ = pos_lider.z;
+  float newX = posLeader.x;
+  float newY = posLeader.y;
+  float newZ = posLeader.z;
 
-  if (pos_lider.x <= pos_meta.x) 
-    newX = pos_meta.x;     
-  else if (pos_lider.x >= pos_meta.x+goalSize) 
-    newX = pos_meta.x+goalSize;
-  if (pos_lider.y <= pos_meta.y) 
-    newY = pos_meta.y;
-  else if (pos_lider.y >= pos_meta.y+goalSize) 
-    newY = pos_meta.y+goalSize;
-  if (pos_lider.y <= pos_meta.y) 
-    newY = pos_meta.z;
-  else if (pos_lider.z >= pos_meta.z+goalSize) 
-    newZ = pos_meta.z+goalSize;
+  if (posLeader.x <= posGoal.x) 
+    newX = posGoal.x;     
+  else if (posLeader.x >= posGoal.x+goalSize) 
+    newX = posGoal.x+goalSize;
+  if (posLeader.y <= posGoal.y) 
+    newY = posGoal.y;
+  else if (posLeader.y >= posGoal.y+goalSize) 
+    newY = posGoal.y+goalSize;
+  if (posLeader.y <= posGoal.y) 
+    newY = posGoal.z;
+  else if (posLeader.z >= posGoal.z+goalSize) 
+    newZ = posGoal.z+goalSize;
 
-  float distX = pos_lider.x-newX;
-  float distY = pos_lider.y-newY;
-  float distZ = pos_lider.z-newZ;
+  float distX = posLeader.x-newX;
+  float distY = posLeader.y-newY;
+  float distZ = posLeader.z-newZ;
   float distance = sqrt(sq(distX) + sq(distY) + sq(distZ));
 
-  if (distance <= liderSize)
+  if (distance <= leaderSize)
   {
-    pos_meta = randomPosition();
+    posGoal = randomPosition();
     if (cameraFollowGoal) // Si la camara deberia seguir a la meta
     {
       updateCameraLookAt();
