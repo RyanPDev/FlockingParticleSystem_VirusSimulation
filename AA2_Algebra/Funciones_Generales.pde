@@ -1,4 +1,4 @@
-void pintar_la_meta() // pinta la meta
+void drawGoal() // pinta la meta
 {
   pushMatrix();
   translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
@@ -67,7 +67,7 @@ void collisionCircleRectangle() {
 
   if (distance <= leaderSize)
   {
-    posGoal = randomPosition();
+    posGoal = calculateRandomPosition();
     if (cameraFollowGoal) // Si la camara deberia seguir a la meta
     {
       updateCameraLookAt();
@@ -76,18 +76,15 @@ void collisionCircleRectangle() {
 }
 
 
-
-
-
-PVector randomPosition() // Mueve la meta a una posicion random dentro del cubo
+PVector calculateRandomPosition() // Mueve la meta a una posicion random dentro del cubo
 {
-  PVector posicion_calculada;
-  posicion_calculada = new PVector(0, 0, 0);
-  posicion_calculada.x = random(0, worldBoundaryX);
-  posicion_calculada.y = random(0, worldBoundaryY);
-  posicion_calculada.z = random(0, worldBoundaryZ); 
+  PVector calculatedPosition;
+  calculatedPosition = new PVector(0, 0, 0);
+  calculatedPosition.x = random(0, worldBoundaryX);
+  calculatedPosition.y = random(0, worldBoundaryY);
+  calculatedPosition.z = random(0, worldBoundaryZ); 
 
-  return posicion_calculada;
+  return calculatedPosition;
 }
 
 /*void isometricViewOn()

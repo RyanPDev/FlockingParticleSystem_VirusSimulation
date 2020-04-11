@@ -1,56 +1,54 @@
-PVector calcula_vector_unitario(PVector pos1, PVector pos2)
+PVector calculateUnitVector(PVector pos1, PVector pos2)
 {
-  PVector vector_calculado;
-  vector_calculado = new PVector(0, 0, 0);
+  PVector calculatedVector;
+  calculatedVector = new PVector(0, 0, 0);
 
   // Pos final (pos 2) menos pos inicial (pos1)
-  vector_calculado.x = pos2.x - pos1.x;
-  vector_calculado.y = pos2.y - pos1.y;
-  vector_calculado.z = pos2.z - pos1.z;
+  calculatedVector.x = pos2.x - pos1.x;
+  calculatedVector.y = pos2.y - pos1.y;
+  calculatedVector.z = pos2.z - pos1.z;
 
   // Se calcula el modulo del vector
   // La raiz cuadrada de la suma de las componentes o coordenadas al cuadrado
 
-  float vector = sq(vector_calculado.x)+sq(vector_calculado.y)+sq(vector_calculado.z);
+  float vector = sq(calculatedVector.x)+sq(calculatedVector.y)+sq(calculatedVector.z);
 
-  if (vector != 0)
+  if (vector != 0) // Prevenimos que no se haga la raiz cuadrada de 0
   {
-    float modulo = sqrt(vector);
+    float module = sqrt(vector);
 
     // Se divide cada componente o coordenada del vector por el modulo para
     // hacerlo unitario
 
-    vector_calculado.x /= modulo;
-    vector_calculado.y /= modulo;
-    vector_calculado.z /= modulo;
+    calculatedVector.x /= module;
+    calculatedVector.y /= module;
+    calculatedVector.z /= module;
   }
 
-  return vector_calculado;
+  return calculatedVector;
 }
 
 
-PVector randomMovement(PVector currentRandom)
+PVector randomMovementDirection(PVector currentRandomPosition)
 {
-  PVector vector_calculado;
-  vector_calculado = currentRandom;
+  PVector calculatedPosition;
+  calculatedPosition = currentRandomPosition;
 
-
-
+  //TEMPORIZADOR
+  //CADA 3 SEGUNDOS, una posicion random diferente
   if (millis() - randomPositionCurrentTime >= randomPositionTotalTime)
   {
-    //TEMPORIZADOR
-    //CADA 3 SEGUNDOS
-    vector_calculado = randomPosition();
+    calculatedPosition = calculateRandomPosition();
     randomPositionCurrentTime = millis();
   }
 
-  return vector_calculado;
+  return calculatedPosition;
 }
 
 PVector calculateAvatarVector(int id)
 {
-  PVector vector_calculado;
-  vector_calculado = new PVector(0.0, 0.0, 0.0);
+  PVector calculatedVector;
+  calculatedVector = new PVector(0.0, 0.0, 0.0);
 
   //Se suman las posiciones de todos los avatares
   if (id != particulaArray.length)
@@ -63,17 +61,17 @@ PVector calculateAvatarVector(int id)
       {
         if (sqrt(sq(vector)) < 30)
         {
-          vector_calculado.x += particulaArray[id].pos.x - particulaArray[i].pos.x;
-          vector_calculado.y += particulaArray[id].pos.y - particulaArray[i].pos.y;
-          vector_calculado.z += particulaArray[id].pos.z - particulaArray[i].pos.z;
-          float modulo = sqrt(sq(vector_calculado.x)+sq(vector_calculado.y)+sq(vector_calculado.z));
+          calculatedVector.x += particulaArray[id].pos.x - particulaArray[i].pos.x;
+          calculatedVector.y += particulaArray[id].pos.y - particulaArray[i].pos.y;
+          calculatedVector.z += particulaArray[id].pos.z - particulaArray[i].pos.z;
+          float module = sqrt(sq(calculatedVector.x)+sq(calculatedVector.y)+sq(calculatedVector.z));
 
           // Se divide cada componente o coordenada del vector por el modulo para
           // hacerlo unitario
 
-          vector_calculado.x /= modulo;
-          vector_calculado.y /= modulo;
-          vector_calculado.z /= modulo;
+          calculatedVector.x /= module;
+          calculatedVector.y /= module;
+          calculatedVector.z /= module;
         }
       }
     }
@@ -81,28 +79,27 @@ PVector calculateAvatarVector(int id)
 
   //Se dividen esa suma por el total de avatares que haya
 
-
-  return vector_calculado;
+  return calculatedVector;
 }
 
 
-PVector dime_centro_bandada() // Promedio entre todos los avatares
+PVector calculateFlockCenter() // Promedio entre todos los avatares
 {
-  PVector vector_calculado;
-  vector_calculado = new PVector(0.0, 0.0, 0.0);
+  PVector calculatedPosition;
+  calculatedPosition = new PVector(0.0, 0.0, 0.0);
 
   //Se suman las posiciones de todos los avatares
   for (int i = 0; i< particulaArray.length; i++) /////////////////////////////////////////////////////////
   {
-    vector_calculado.x += particulaArray[i].pos.x;
-    vector_calculado.y += particulaArray[i].pos.y;
-    vector_calculado.z += particulaArray[i].pos.z;
+    calculatedPosition.x += particulaArray[i].pos.x;
+    calculatedPosition.y += particulaArray[i].pos.y;
+    calculatedPosition.z += particulaArray[i].pos.z;
   }
 
   //Se dividen esa suma por el total de avatares que haya
-  vector_calculado.x /= 10;
-  vector_calculado.y /= 10;
-  vector_calculado.z /= 10;
+  calculatedPosition.x /= 10;
+  calculatedPosition.y /= 10;
+  calculatedPosition.z /= 10;
 
-  return vector_calculado;
+  return calculatedPosition;
 }

@@ -106,7 +106,7 @@ void setup()
   //Inicializar ciertos valores
 
   posGoal = new PVector(0, 0, 0);
-  posGoal = randomPosition(); // Posicion random para la meta
+  posGoal = calculateRandomPosition(); // Posicion random para la meta
   posLeader = new PVector(0.0, 0.0, 0.0);
   inc_t = 0.4;
   updateCameraLookAt();
@@ -130,12 +130,12 @@ void draw()
     // Calcular
     if (gamePhase == Phase.SIMULATION)
     {
-      particulaArray[i].muevete();
+      particulaArray[i].move();
     }
     // Dibujar
-    particulaArray[i].pintate();
+    particulaArray[i].drawParticle();
   }
-  pintar_la_meta();
+  drawGoal();
   collisionCircleRectangle();
 
   drawHUD();
