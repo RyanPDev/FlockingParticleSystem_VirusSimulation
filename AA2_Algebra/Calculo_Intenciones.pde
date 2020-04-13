@@ -76,11 +76,26 @@ PVector calculateAvatarVector(int id)
         }
       }
     }
-    if(socialDistancing)
+  }
+  // Comprovación con el Lider
+  float vector = sq(particulaArray[id].pos.x - particulaArray[0].pos.x)+sq(particulaArray[id].pos.y - particulaArray[0].pos.y)+sq(particulaArray[id].pos.z - particulaArray[0].pos.z);
+    if (vector!=0)
+    {
+      float distance = sqrt(vector);
+      if (distance < minimumGetAwayDistance)
+      {
+        if(distance < closestDistance)
+        {
+           closestDistance = distance;
+           closestAvatar = 0;
+           socialDistancing = true;
+        }
+      }
+    }
+    if(socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
     {
         calculatedVector = calculateUnitVector(particulaArray[closestAvatar].pos,particulaArray[id].pos);
     }
-  }
 
   //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
 
