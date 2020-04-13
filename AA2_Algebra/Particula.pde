@@ -30,7 +30,7 @@ class particula {
     KM = random(0, 1-KL);  // Meta
     KB = 1-(KM+KL); // Bandada
 
-    KA = 0.0; // MIENTRAS ESTO SEA 0 NO VA A AFECTAR NADA EN EL CODIGO, esto es lo de que los pajaros se alejen
+    KA = 2.0; // Constante que evita el choque (es muy alta pero es para priorizarla siempre ante las demas para evitar el choque)
 
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
@@ -40,7 +40,7 @@ class particula {
       speedLimit = speedLimit*2;
       KR = 0.35;
       KM = 1- KR;
-      leaderSize = t;
+      //leaderSize = t;
     }
   }
   // METODOS
@@ -71,7 +71,10 @@ class particula {
       acel.z += KM * goalVector.z + KR * randomVector.z;
     } else // sino voy a seguir al lider y a ir a la meta y no alejarme de la bandada
     {
-      randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
+      
+      
+      if(randomMode)
+        randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
 
       goalVector = calculateUnitVector(pos, posGoal);
 
@@ -127,6 +130,31 @@ class particula {
     pos.x = pos.x + vel.x * inc_t;
     pos.y = pos.y + vel.y * inc_t;
     pos.z = pos.z + vel.z * inc_t;
+    
+    if(pos.x > worldBoundaryX - size)
+    {
+       pos.x = worldBoundaryX - size; 
+    }
+    else if(pos.x < 0 + size)
+    {
+       pos.x = 0 + size;
+    }
+    if(pos.y > worldBoundaryY - size)
+    {
+       pos.y = worldBoundaryY - size; 
+    }
+    else if(pos.y < 0 + size)
+    {
+       pos.y = 0 + size;
+    }
+    if(pos.z > worldBoundaryZ - size)
+    {
+       pos.z = worldBoundaryZ - size; 
+    }
+    else if(pos.z < 0 + size)
+    {
+       pos.z = 0 + size;
+    }
 
     //salvar posicion lider
     if (leader == 1)
@@ -141,8 +169,8 @@ class particula {
   {
     pushMatrix();
     translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
-    rotateX(radians(-35.26));
-    rotateY(radians(-45));
+    //rotateX(radians(-35.26));
+    //rotateY(radians(-45));
     strokeWeight(8);
     stroke(255, 215, 0);
     noFill();
@@ -160,9 +188,9 @@ class particula {
       randomConstantCurrentTime = millis();
       if (idNumber == 1)
       {
-        println(KL);
-        println(KM);
-        println(KB);
+        //println(KL);
+       // println(KM);
+        //println(KB);
         println("CAMBIO");
       }
     }
@@ -175,8 +203,8 @@ class particula {
 
     translate(pos.x, pos.y, pos.z);
 
-    rotateX(radians(-35.26));
-    rotateY(radians(-45));
+    //rotateX(radians(-35.26));
+    //rotateY(radians(-45));
 
     // rotate(radians(rotation.x),radians(rotation.y),radians(rotation.z),0);
     /// FUNCION QUE ROTE EL MONIGOTE
