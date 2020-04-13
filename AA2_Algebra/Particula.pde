@@ -26,10 +26,12 @@ class particula {
     idNumber = id;
     rotation = new PVector(35.26, -45, 0);
     //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
-    KL = random(0, 1); // Lider
-    KM = random(0, 1-KL);  // Meta
-    KB = 1-(KM+KL); // Bandada
-
+   // KL = random(0, 0.8); // Lider
+ //   KM = random(0, 1-KL);  // Meta
+  //  KB = 1-(KM+KL); // Bandada
+    KL = random(0.3,0.5);
+    KM = random(0.2,0.4);
+    KB = 1-(KM+KL);
     KA = 2.0; // Constante que evita el choque (es muy alta pero es para priorizarla siempre ante las demas para evitar el choque)
 
     randomMovementPosition = new PVector(0, 0, 0);
@@ -37,7 +39,7 @@ class particula {
     randomConstantTotalTime = 5000; // 5 segundos
     if (leader == 1)
     {
-      speedLimit = speedLimit*2;
+      speedLimit = speedLimit*1.5;
       KR = 0.35;
       KM = 1- KR;
       //leaderSize = t;
@@ -186,12 +188,11 @@ class particula {
       KM = random(0, 1-KL);  // Meta
       KB = 1-(KM+KL); // Bandada
       randomConstantCurrentTime = millis();
-      if (idNumber == 1)
+      if (idNumber >= 1)
       {
-        //println(KL);
-       // println(KM);
-        //println(KB);
-        println("CAMBIO");
+        println("id: "+idNumber+" KL: "+KL+" KM: "+KM+" KB: "+KB);
+        
+        //println("CAMBIO");
       }
     }
   }
