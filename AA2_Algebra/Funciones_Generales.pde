@@ -2,8 +2,8 @@ void drawGoal() // pinta la meta
 {
   pushMatrix();
   translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
-  rotateX(radians(-35.26));
-  rotateY(radians(-45));
+  //rotateX(radians(-35.26));
+  //rotateY(radians(-45));
   strokeWeight(8);
   stroke(255, 215, 0);
   fill(255, 0, 0);
@@ -18,27 +18,36 @@ void drawWorldBoundaries() //Dibuja el cubo de los limites
   stroke(0, 255, 255);
   sphere(20);
   translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
-  rotateX(radians(-35.26));
-  rotateY(radians(-45));
+  //rotateX(radians(-35.26));
+ // rotateY(radians(-45));
   stroke(0, 0, 255);
   strokeWeight(5);
   noFill();
 
 
-  box(worldBoundaryX*1.5, worldBoundaryY*1.5, worldBoundaryZ*1.5);  
+  box(worldBoundaryX, worldBoundaryY, worldBoundaryZ);  
   popMatrix();
 }
 
 
 void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 {
+  pushMatrix();
+  
   if (cameraPhase == CamPhase.GOAL)
   {
-    cam.lookAt(posGoal.x, posGoal.y, posGoal.z, animationTimeInMillis);
+    translate(posGoal.x, posGoal.y, posGoal.z);
+    applyMatrix(g3.camera);
+    cam.lookAt(0, 0, 0, animationTimeInMillis);
+    //cam.lookAt(posGoal.x, posGoal.y, posGoal.z, animationTimeInMillis);
   } else if (cameraPhase == CamPhase.CENTERWORLD)
   {
-    cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
+    translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
+    applyMatrix(g3.camera);
+    cam.lookAt(0, 0, 0, animationTimeInMillis);
+    //cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
   }
+  popMatrix();
 }
 
 

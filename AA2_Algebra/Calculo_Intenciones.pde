@@ -49,35 +49,40 @@ PVector calculateAvatarVector(int id)
 {
   PVector calculatedVector;
   calculatedVector = new PVector(0.0, 0.0, 0.0);
+  
+  int closestAvatar = 0;
+  float minimumGetAwayDistance = leaderSize * 3;
+  float closestDistance = minimumGetAwayDistance;
+  boolean socialDistancing = false;
 
   //Se suman las posiciones de todos los avatares
   if (id != particulaArray.length)
   {
     for (int i = id+1; i < particulaArray.length; i++) /////////////////////////////////////////////////////////
     {
-      float vector = particulaArray[id].pos.x - particulaArray[i].pos.x;
-
+      float vector = sq(particulaArray[id].pos.x - particulaArray[i].pos.x)+sq(particulaArray[id].pos.y - particulaArray[i].pos.y)+sq(particulaArray[id].pos.z - particulaArray[i].pos.z);
+      
       if (vector!=0)
       {
-        if (sqrt(sq(vector)) < 30)
+        float distance = sqrt(vector);
+        if (distance < minimumGetAwayDistance)
         {
-          calculatedVector.x += particulaArray[id].pos.x - particulaArray[i].pos.x;
-          calculatedVector.y += particulaArray[id].pos.y - particulaArray[i].pos.y;
-          calculatedVector.z += particulaArray[id].pos.z - particulaArray[i].pos.z;
-          float module = sqrt(sq(calculatedVector.x)+sq(calculatedVector.y)+sq(calculatedVector.z));
-
-          // Se divide cada componente o coordenada del vector por el modulo para
-          // hacerlo unitario
-
-          calculatedVector.x /= module;
-          calculatedVector.y /= module;
-          calculatedVector.z /= module;
+          if(distance < closestDistance)
+          {
+             closestDistance = distance;
+             closestAvatar = i;
+             socialDistancing = true;
+          }
         }
       }
     }
+    if(socialDistancing)
+    {
+        calculatedVector = calculateUnitVector(particulaArray[closestAvatar].pos,particulaArray[id].pos);
+    }
   }
 
-  //Se dividen esa suma por el total de avatares que haya
+  //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
 
   return calculatedVector;
 }

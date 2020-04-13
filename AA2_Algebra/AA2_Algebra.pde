@@ -1,23 +1,14 @@
 import peasy.*;
 
-// Un generador de intenciones
-// Una simulacion automatica de avatares
-// Hueristicas de moviminetos
-// Una especie de cerebro
-// 10 Avatares, 1 es el lider
-// Reaprovechamos el codigo de sistemas de particulas
-// Con Clases y Objetos
-// 1 avatar = particula "pero" se mueve en base a otras leyes
-
 //Zona de Variables y Objetos
 
 //Delta tiempo
 float inc_t;
 
 //Posiciones de la meta y el avatar lider
-particula[] particulaArray = new particula[10];
+particula[] particulaArray = new particula[100];
 PVector posGoal, posLeader;
-float leaderSize, leaderInitialSpeed;
+float leaderInitialSpeed;
 
 //Tamaño del mundo
 float worldBoundaryX;
@@ -31,8 +22,10 @@ enum Phase {
 Phase gamePhase; // La fase actual en la que se encuentra el juego
 Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encuentra cuando le da al pause
 boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
-
+boolean randomMode = false; // Variable de control para controlar cuando el juego esta en modo random o no.
+boolean showRedArrow = true;
 //Cámara
+PGraphics3D g3;
 PeasyCam cam;
 enum CamPhase {
   CENTERWORLD, GOAL, LEADER
@@ -42,14 +35,16 @@ boolean cameraFollowGoal = false; // Variable de control para señalar que la ca
 long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
 boolean showControls;
 
+
 //Timers
 float randomPositionCurrentTime;
 float randomPositionTotalTime;
 
 //Tamaños
 float goalSize; // Tamaño del cubo que es la meta
-float mosquitoSize; // Tamaño de los que no son lideres
-float mosqueenSize; // Tamaño del lider
+float nonLeaderMaxSize; // Tamaño máximo de los que no son lideres
+float nonLeaderMinSize; // Tamaño máximo de los que no son lideres
+float leaderSize; // Tamaño del lider
 
 //Zona de SetUp
 void setup()
@@ -70,25 +65,27 @@ void setup()
   
   animationTimeInMillis = 1000;
   
+  g3 = (PGraphics3D) g;
   cameraPhase = CamPhase.CENTERWORLD;
   showControls = false;
   updateCameraLookAt();
  
   //lights();
   
-  mosquitoSize = random(10.0, 15.0);
-  mosqueenSize = 18;
+  leaderSize = 38;
+  nonLeaderMaxSize = 25.0;
+  nonLeaderMinSize = 20.0;
   goalSize = 30;
   
   // Lider
-  particulaArray[0] = new particula(
-  new PVector (0.0, 0.0, 0.0), // Posicion
-  new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
-  1.0, // Massa
-  mosqueenSize, // Tamaño 
-  color(255, 255, 0), // Color
-  1, // Es lider (1 si, 0 no)
-  0); // Id
+      particulaArray[0] = new particula(
+      new PVector (0.0, 0.0, 0.0), // Posicion
+      new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
+      1.0, // Massa
+      leaderSize, // Tamaño 
+      color(255, 255, 0), // Color
+      1, // Es lider (1 si, 0 no)
+      0); // Id
   
   // Bandada
   for (int i = 1; i < particulaArray.length; i++)
@@ -98,7 +95,7 @@ void setup()
       new PVector (random(0, worldBoundaryX), random(0, worldBoundaryY), random(0, worldBoundaryZ)), 
       new PVector (random(-10.0, 10.0), random(-10.0, 10.0), random(-10.0, 10.0)), 
       1.0, 
-      mosquitoSize, 
+      random(nonLeaderMinSize, nonLeaderMaxSize), 
       color(0, random(255), 0), 
       0, 
       i);
@@ -123,6 +120,10 @@ void setup()
 void draw()
 {
   background(255);
+  pushMatrix();
+  rotateX(radians(-35.26));
+  rotateY(radians(-45));
+  
   drawWorldBoundaries(); // Dibuja el cubo que representa los limites del mundo
   
   for (int i = 0; i < particulaArray.length; i++) 
@@ -137,6 +138,8 @@ void draw()
   }
   drawGoal();
   collisionCircleRectangle();
+  
+  popMatrix();
 
   drawHUD();
 }
