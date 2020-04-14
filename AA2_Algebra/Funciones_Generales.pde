@@ -52,20 +52,27 @@ void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 
 
 void collisionCircleRectangle() {
+ 
+  
   float newX = posLeader.x;
   float newY = posLeader.y;
   float newZ = posLeader.z;
 
   if (posLeader.x <= posGoal.x) 
-    newX = posGoal.x;     
+    newX = posGoal.x;   
+    
   else if (posLeader.x >= posGoal.x+goalSize) 
     newX = posGoal.x+goalSize;
+    
   if (posLeader.y <= posGoal.y) 
     newY = posGoal.y;
+    
   else if (posLeader.y >= posGoal.y+goalSize) 
     newY = posGoal.y+goalSize;
-  if (posLeader.y <= posGoal.y) 
-    newY = posGoal.z;
+    
+  if (posLeader.z <= posGoal.z) 
+    newZ = posGoal.z;
+    
   else if (posLeader.z >= posGoal.z+goalSize) 
     newZ = posGoal.z+goalSize;
 
@@ -77,6 +84,34 @@ void collisionCircleRectangle() {
   if (distance <= leaderSize)
   {
     posGoal = calculateRandomPosition();
+    
+    float borderDistance = goalSize *3;
+    
+    if(posGoal.x > worldBoundaryX - borderDistance)
+    {
+       posGoal.x = worldBoundaryX - borderDistance; 
+    }
+    else if(posGoal.x < 0 + borderDistance)
+    {
+       posGoal.x = 0 + borderDistance;
+    }
+    if(posGoal.y > worldBoundaryY - borderDistance)
+    {
+       posGoal.y = worldBoundaryY - borderDistance; 
+    }
+    else if(posGoal.y < 0 + borderDistance)
+    {
+       posGoal.y = 0 + borderDistance;
+    }
+    if(posGoal.z > worldBoundaryZ - borderDistance)
+    {
+       posGoal.z = worldBoundaryZ - borderDistance; 
+    }
+    else if(posGoal.z < 0 + borderDistance)
+    {
+       posGoal.z = 0 + borderDistance;
+    }
+    
     if (cameraFollowGoal) // Si la camara deberia seguir a la meta
     {
       updateCameraLookAt();

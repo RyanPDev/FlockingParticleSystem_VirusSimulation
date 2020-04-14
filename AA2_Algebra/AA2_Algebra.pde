@@ -6,9 +6,14 @@ import peasy.*;
 float inc_t;
 
 //Posiciones de la meta y el avatar lider
-particula[] particulaArray = new particula[100];
+particula[] particulaArray = new particula[10];
 PVector posGoal, posLeader;
 float leaderInitialSpeed;
+
+
+ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de enemigos
+boolean enemyCreated = false;
+boolean enemyErased = false;
 
 //Tamaño del mundo
 float worldBoundaryX;
@@ -41,9 +46,10 @@ float randomPositionCurrentTime;
 float randomPositionTotalTime;
 
 //Tamaños
-float goalSize; // Tamaño del cubo que es la meta
+  float goalSize; // Tamaño del cubo que es la meta
 float nonLeaderMaxSize; // Tamaño máximo de los que no son lideres
 float nonLeaderMinSize; // Tamaño máximo de los que no son lideres
+float enemySize;
 float leaderSize; // Tamaño del lider
 
 //Zona de SetUp
@@ -75,6 +81,7 @@ void setup()
   leaderSize = 38;
   nonLeaderMaxSize = 25.0;
   nonLeaderMinSize = 20.0;
+  enemySize = 50;
   goalSize = 30;
   
   // Lider
@@ -136,6 +143,9 @@ void draw()
     // Dibujar
     particulaArray[i].drawParticle();
   }
+  
+  enemyInteraction();
+  
   drawGoal();
   collisionCircleRectangle();
   
