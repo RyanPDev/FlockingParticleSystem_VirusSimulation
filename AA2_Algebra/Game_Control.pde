@@ -51,7 +51,41 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     }
     updateCameraLookAt();
   }
+  if ((key == '+') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  {
+    if (!enemyCreated)
+    {
+      enemyCreated = true;
+      createEnemy();
+    } 
+  }
+  if ((key == '-') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  {
+    if (!enemyErased)
+    {
+      enemyErased = true;
+      eraseEnemy();
+    } 
+  }
 }
+void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
+{
+    if ((key == '+') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+    {
+      if (enemyCreated)
+      {
+        enemyCreated = false;
+      }
+    }
+    if ((key == '-') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  {
+    if (enemyErased)
+    {
+      enemyErased = false;
+    } 
+  }
+}
+
 
 void drawHUD() // Funcion que pone el mensaje
 {

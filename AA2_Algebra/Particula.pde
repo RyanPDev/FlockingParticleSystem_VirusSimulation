@@ -10,7 +10,7 @@ class particula {
   color colorP;
   PVector randomMovementPosition;
   int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
-  float speedLimit = 2.5;
+  float speedLimit = 5;
 
   float randomConstantCurrentTime;
   float randomConstantTotalTime;
