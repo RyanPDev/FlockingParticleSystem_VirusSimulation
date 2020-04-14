@@ -15,6 +15,9 @@ ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de enemigos
 boolean enemyCreated = false;
 boolean enemyErased = false;
 
+ArrayList<Food> arrayFood = new ArrayList();
+boolean foodCreated = false;
+
 //Tamaño del mundo
 float worldBoundaryX;
 float worldBoundaryY;
@@ -46,19 +49,20 @@ float randomPositionCurrentTime;
 float randomPositionTotalTime;
 
 //Tamaños
-  float goalSize; // Tamaño del cubo que es la meta
+float goalSize; // Tamaño del cubo que es la meta
 float nonLeaderMaxSize; // Tamaño máximo de los que no son lideres
 float nonLeaderMinSize; // Tamaño máximo de los que no son lideres
 float enemySize;
+float foodSize;
 float leaderSize; // Tamaño del lider
 
 //Zona de SetUp
 void setup()
 {
   gamePhase = Phase.STARTING;
-  
+
   size(1000, 700, P3D);
-  
+
   // Tamaño del mundo
   worldBoundaryX = 1000;
   worldBoundaryY = 1000;
@@ -68,32 +72,33 @@ void setup()
   cam = new PeasyCam(this, 2800);
   cam.setMinimumDistance(50);
   cam.setMaximumDistance(2800);
-  
+
   animationTimeInMillis = 1000;
-  
+
   g3 = (PGraphics3D) g;
   cameraPhase = CamPhase.CENTERWORLD;
   showControls = false;
   updateCameraLookAt();
- 
+
   //lights();
-  
+
   leaderSize = 38;
   nonLeaderMaxSize = 25.0;
   nonLeaderMinSize = 20.0;
   enemySize = 50;
   goalSize = 30;
-  
+  foodSize = 20;
+
   // Lider
-      particulaArray[0] = new particula(
-      new PVector (0.0, 0.0, 0.0), // Posicion
-      new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
-      1.0, // Massa
-      leaderSize, // Tamaño 
-      color(255, 255, 0), // Color
-      1, // Es lider (1 si, 0 no)
-      0); // Id
-  
+  particulaArray[0] = new particula(
+    new PVector (0.0, 0.0, 0.0), // Posicion
+    new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
+    1.0, // Massa
+    leaderSize, // Tamaño 
+    color(255, 255, 0), // Color
+    1, // Es lider (1 si, 0 no)
+    0); // Id
+
   // Bandada
   for (int i = 1; i < particulaArray.length; i++)
   {
@@ -117,7 +122,7 @@ void setup()
 
   isPaused = false;
   gamePhase = Phase.SIMULATION;
-  
+
   //Temporizadores
   randomPositionTotalTime = 3000; // 3 segundos
   randomPositionCurrentTime = 0;
@@ -130,9 +135,9 @@ void draw()
   pushMatrix();
   rotateX(radians(-35.26));
   rotateY(radians(-45));
-  
+
   drawWorldBoundaries(); // Dibuja el cubo que representa los limites del mundo
-  
+
   for (int i = 0; i < particulaArray.length; i++) 
   {
     // Calcular
@@ -143,12 +148,13 @@ void draw()
     // Dibujar
     particulaArray[i].drawParticle();
   }
-  
+
   enemyInteraction();
-  
+  foodInteraction();
+
   drawGoal();
-  collisionCircleRectangle();
-  
+  collisionLeaderGoal();
+
   popMatrix();
 
   drawHUD();

@@ -4,7 +4,7 @@ void drawGoal() // pinta la meta
   translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
   //rotateX(radians(-35.26));
   //rotateY(radians(-45));
-  strokeWeight(8);
+  strokeWeight(2);
   stroke(255, 215, 0);
   fill(255, 0, 0);
   box(goalSize);
@@ -19,7 +19,7 @@ void drawWorldBoundaries() //Dibuja el cubo de los limites
   sphere(20);
   translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
   //rotateX(radians(-35.26));
- // rotateY(radians(-45));
+  // rotateY(radians(-45));
   stroke(0, 0, 255);
   strokeWeight(5);
   noFill();
@@ -33,7 +33,7 @@ void drawWorldBoundaries() //Dibuja el cubo de los limites
 void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 {
   pushMatrix();
-  
+
   if (cameraPhase == CamPhase.GOAL)
   {
     translate(posGoal.x, posGoal.y, posGoal.z);
@@ -51,28 +51,22 @@ void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 }
 
 
-void collisionCircleRectangle() {
- 
-  
+
+void collisionLeaderGoal() {  
   float newX = posLeader.x;
   float newY = posLeader.y;
   float newZ = posLeader.z;
 
   if (posLeader.x <= posGoal.x) 
-    newX = posGoal.x;   
-    
+    newX = posGoal.x;       
   else if (posLeader.x >= posGoal.x+goalSize) 
-    newX = posGoal.x+goalSize;
-    
+    newX = posGoal.x+goalSize;    
   if (posLeader.y <= posGoal.y) 
-    newY = posGoal.y;
-    
+    newY = posGoal.y;    
   else if (posLeader.y >= posGoal.y+goalSize) 
-    newY = posGoal.y+goalSize;
-    
+    newY = posGoal.y+goalSize;    
   if (posLeader.z <= posGoal.z) 
-    newZ = posGoal.z;
-    
+    newZ = posGoal.z;    
   else if (posLeader.z >= posGoal.z+goalSize) 
     newZ = posGoal.z+goalSize;
 
@@ -84,41 +78,37 @@ void collisionCircleRectangle() {
   if (distance <= leaderSize)
   {
     posGoal = calculateRandomPosition();
-    
+
     float borderDistance = goalSize *3;
-    
-    if(posGoal.x > worldBoundaryX - borderDistance)
+
+    if (posGoal.x > worldBoundaryX - borderDistance)
     {
-       posGoal.x = worldBoundaryX - borderDistance; 
-    }
-    else if(posGoal.x < 0 + borderDistance)
+      posGoal.x = worldBoundaryX - borderDistance;
+    } else if (posGoal.x < 0 + borderDistance)
     {
-       posGoal.x = 0 + borderDistance;
+      posGoal.x = 0 + borderDistance;
     }
-    if(posGoal.y > worldBoundaryY - borderDistance)
+    if (posGoal.y > worldBoundaryY - borderDistance)
     {
-       posGoal.y = worldBoundaryY - borderDistance; 
-    }
-    else if(posGoal.y < 0 + borderDistance)
+      posGoal.y = worldBoundaryY - borderDistance;
+    } else if (posGoal.y < 0 + borderDistance)
     {
-       posGoal.y = 0 + borderDistance;
+      posGoal.y = 0 + borderDistance;
     }
-    if(posGoal.z > worldBoundaryZ - borderDistance)
+    if (posGoal.z > worldBoundaryZ - borderDistance)
     {
-       posGoal.z = worldBoundaryZ - borderDistance; 
-    }
-    else if(posGoal.z < 0 + borderDistance)
+      posGoal.z = worldBoundaryZ - borderDistance;
+    } else if (posGoal.z < 0 + borderDistance)
     {
-       posGoal.z = 0 + borderDistance;
+      posGoal.z = 0 + borderDistance;
     }
-    
+
     if (cameraFollowGoal) // Si la camara deberia seguir a la meta
     {
       updateCameraLookAt();
     }
   }
 }
-
 
 PVector calculateRandomPosition() // Mueve la meta a una posicion random dentro del cubo
 {

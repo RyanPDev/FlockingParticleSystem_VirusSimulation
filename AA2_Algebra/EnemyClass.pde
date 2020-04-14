@@ -10,7 +10,7 @@ class Enemy {
   color colorP;
   PVector randomMovementPosition;
   
-  float speedLimit = 1;
+  float speedLimit = 2;
 
   float randomConstantCurrentTime;
   float randomConstantTotalTime;
