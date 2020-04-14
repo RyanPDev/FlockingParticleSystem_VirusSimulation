@@ -51,7 +51,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     }
     updateCameraLookAt();
   }
-  if ((key == '+') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  if ((key == '+') && gamePhase != Phase.STARTING)
   {
     if (!enemyCreated)
     {
@@ -59,7 +59,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       createEnemy();
     } 
   }
-  if ((key == '-') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  if ((key == '-') && gamePhase != Phase.STARTING)
   {
     if (!enemyErased)
     {
@@ -67,6 +67,15 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       eraseEnemy();
     } 
   }
+  if ((key == 'f' || key == 'F') && gamePhase != Phase.STARTING)
+  {
+    if (!foodCreated)
+    {
+      foodCreated = true;
+      createFood();
+    } 
+  }
+  
 }
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
 {
@@ -82,6 +91,13 @@ void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que s
     if (enemyErased)
     {
       enemyErased = false;
+    } 
+  }
+  if ((key == 'f' || key == 'F') && gamePhase != Phase.STARTING)
+  {
+    if (foodCreated)
+    {
+      foodCreated = false;
     } 
   }
 }

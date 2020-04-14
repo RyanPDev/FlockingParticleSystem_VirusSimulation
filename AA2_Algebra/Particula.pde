@@ -10,7 +10,7 @@ class particula {
   color colorP;
   PVector randomMovementPosition;
   int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
-  float speedLimit = 5;
+  float speedLimit = 4;
 
   float randomConstantCurrentTime;
   float randomConstantTotalTime;
@@ -26,11 +26,11 @@ class particula {
     idNumber = id;
     rotation = new PVector(35.26, -45, 0);
     //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
-   // KL = random(0, 0.8); // Lider
- //   KM = random(0, 1-KL);  // Meta
-  //  KB = 1-(KM+KL); // Bandada
-    KL = random(0.3,0.5);
-    KM = random(0.2,0.4);
+    // KL = random(0, 0.8); // Lider
+    //   KM = random(0, 1-KL);  // Meta
+    //  KB = 1-(KM+KL); // Bandada
+    KL = random(0.3, 0.5);
+    KM = random(0.2, 0.4);
     KB = 1-(KM+KL);
     KA = 2.0; // Constante que evita el choque (es muy alta pero es para priorizarla siempre ante las demas para evitar el choque)
 
@@ -73,9 +73,9 @@ class particula {
       acel.z += KM * goalVector.z + KR * randomVector.z;
     } else // sino voy a seguir al lider y a ir a la meta y no alejarme de la bandada
     {
-      
-      
-      if(randomMode)
+
+
+      if (randomMode)
         randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
 
       goalVector = calculateUnitVector(pos, posGoal);
@@ -132,30 +132,27 @@ class particula {
     pos.x = pos.x + vel.x * inc_t;
     pos.y = pos.y + vel.y * inc_t;
     pos.z = pos.z + vel.z * inc_t;
-    
-    if(pos.x > worldBoundaryX - size)
+
+    if (pos.x > worldBoundaryX - size)
     {
-       pos.x = worldBoundaryX - size; 
+      pos.x = worldBoundaryX - size;
+    } else if (pos.x < 0 + size)
+    {
+      pos.x = 0 + size;
     }
-    else if(pos.x < 0 + size)
+    if (pos.y > worldBoundaryY - size)
     {
-       pos.x = 0 + size;
+      pos.y = worldBoundaryY - size;
+    } else if (pos.y < 0 + size)
+    {
+      pos.y = 0 + size;
     }
-    if(pos.y > worldBoundaryY - size)
+    if (pos.z > worldBoundaryZ - size)
     {
-       pos.y = worldBoundaryY - size; 
-    }
-    else if(pos.y < 0 + size)
+      pos.z = worldBoundaryZ - size;
+    } else if (pos.z < 0 + size)
     {
-       pos.y = 0 + size;
-    }
-    if(pos.z > worldBoundaryZ - size)
-    {
-       pos.z = worldBoundaryZ - size; 
-    }
-    else if(pos.z < 0 + size)
-    {
-       pos.z = 0 + size;
+      pos.z = 0 + size;
     }
 
     //salvar posicion lider
@@ -191,9 +188,16 @@ class particula {
       if (idNumber >= 1)
       {
         println("id: "+idNumber+" KL: "+KL+" KM: "+KM+" KB: "+KB);
-        
+
         //println("CAMBIO");
       }
+    }
+  }
+
+  void collisionParticleFood() {
+    for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+    {
+      eraseFood(i);
     }
   }
 
@@ -216,20 +220,20 @@ class particula {
     strokeWeight(1);
 
     sphere(size);
-/*
+    /*
     strokeWeight(5);
-    //Eje X
-    stroke(255, 0, 0);
-    line(0, 0, 0, 100, 0, 0);
-
-    //Eje Y
-    stroke(0, 255, 0);
-    line(0, 0, 0, 0, -100, 0);
-
-    //Eje Z
-    stroke(0, 0, 255);
-    line(0, 0, 0, 0, 0, 100);
-*/
+     //Eje X
+     stroke(255, 0, 0);
+     line(0, 0, 0, 100, 0, 0);
+     
+     //Eje Y
+     stroke(0, 255, 0);
+     line(0, 0, 0, 0, -100, 0);
+     
+     //Eje Z
+     stroke(0, 0, 255);
+     line(0, 0, 0, 0, 0, 100);
+     */
     popMatrix();
   }
 }
