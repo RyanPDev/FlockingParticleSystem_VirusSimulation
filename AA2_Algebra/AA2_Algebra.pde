@@ -9,7 +9,7 @@ float inc_t;
 particula[] particulaArray = new particula[10];
 PVector posGoal, posLeader;
 float leaderInitialSpeed;
-
+//xd
 
 ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de enemigos
 boolean enemyCreated = false;
