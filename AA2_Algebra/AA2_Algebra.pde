@@ -23,7 +23,9 @@ ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de enemigos
 ArrayList<Food> arrayFood = new ArrayList();
 boolean foodCreated = false;
 
-enum ObjectType{AVATAR, ENEMY, FOOD};
+enum ObjectType {
+  AVATAR, ENEMY, FOOD
+};
 ObjectType selectedObjectType;
 //Tamaño del mundo
 float worldBoundaryX;
@@ -104,27 +106,27 @@ void setup()
 
   // Lider
   /*particulaArray[0] = new particula(
-    new PVector (0.0, 0.0, 0.0), // Posicion
-    new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
-    1.0, // Massa
-    leaderSize, // Tamaño 
-    color(255, 255, 0), // Color
-    1, // Es lider (1 si, 0 no)
-    0); // Id
-
-  // Bandada
-  for (int i = 1; i < particulaArray.length; i++)
-  {
-    //new PVector (10.0,height/2.0,-10.0) posicion que habia antes del random
-    particulaArray[i] = new particula(
-      new PVector (random(0, worldBoundaryX), random(0, worldBoundaryY), random(0, worldBoundaryZ)), 
-      new PVector (random(-10.0, 10.0), random(-10.0, 10.0), random(-10.0, 10.0)), 
-      1.0, 
-      random(nonLeaderMinSize, nonLeaderMaxSize), 
-      color(0, random(255), 0), 
-      0, 
-      i);
-  }*/
+   new PVector (0.0, 0.0, 0.0), // Posicion
+   new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
+   1.0, // Massa
+   leaderSize, // Tamaño 
+   color(255, 255, 0), // Color
+   1, // Es lider (1 si, 0 no)
+   0); // Id
+   
+   // Bandada
+   for (int i = 1; i < particulaArray.length; i++)
+   {
+   //new PVector (10.0,height/2.0,-10.0) posicion que habia antes del random
+   particulaArray[i] = new particula(
+   new PVector (random(0, worldBoundaryX), random(0, worldBoundaryY), random(0, worldBoundaryZ)), 
+   new PVector (random(-10.0, 10.0), random(-10.0, 10.0), random(-10.0, 10.0)), 
+   1.0, 
+   random(nonLeaderMinSize, nonLeaderMaxSize), 
+   color(0, random(255), 0), 
+   0, 
+   i);
+   }*/
   //Inicializar ciertos valores
 
   posGoal = new PVector(0, 0, 0);
