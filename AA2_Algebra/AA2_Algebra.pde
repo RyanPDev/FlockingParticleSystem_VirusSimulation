@@ -69,7 +69,7 @@ float leaderSize; // Tamaño del lider
 
 String showControlsText = "Press 'H' to show simulation controls";
 String simulationControlsText= "Press 'P' to Pause/Unpause\nPress 'V' to focus on the goal or back to default\nPress 'R' for Random Mode\nRandom mode->(Every 3 seconds, every avatar will behave differently)\nPres 'H' to hide controls";
-String addingControlText = "Press 'SPACE' to change the object selected\nPress '+' or '-' to add or delete somtheing\ndepending on what you are selecting";
+String addingControlText = "Press 'SPACE' to change the object selected\nPress '+' or '-' to add or delete something\ndepending on what you are selecting";
 String cameraControlsText= "\nDrag with Left Click to rotate camera\nSpin Mouse Wheel to Zoom\nPress Mouse Wheel and drag to move Camera\n";
 //Zona de SetUp
 void setup()

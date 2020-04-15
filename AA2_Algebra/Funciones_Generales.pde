@@ -42,9 +42,8 @@ void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
     //cam.lookAt(posGoal.x, posGoal.y, posGoal.z, animationTimeInMillis);
   } else if (cameraPhase == CamPhase.CENTERWORLD)
   {
-    translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
-    applyMatrix(g3.camera);
-    cam.lookAt(0, 0, 0, animationTimeInMillis);
+    
+    cam.lookAt(500, 50,500, animationTimeInMillis);
     //cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
   }
   popMatrix();
