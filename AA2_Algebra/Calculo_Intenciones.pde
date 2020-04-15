@@ -49,55 +49,55 @@ PVector calculateAvatarVector(int id)
 {
   PVector calculatedVector;
   calculatedVector = new PVector(0.0, 0.0, 0.0);
-  
+
   int closestAvatar = 0;
   float minimumGetAwayDistance = leaderSize * 3;
   float closestDistance = minimumGetAwayDistance;
   boolean socialDistancing = false;
-  
-  if(id < arrayAvatar.size())
+
+  if (id < arrayAvatar.size())
   {
-  particula avatar1 = arrayAvatar.get(id);
-  
-  for (int i = arrayAvatar.size(); i-- > id; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
-  {
-    particula avatar2 = arrayAvatar.get(i);
-    float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
-     if (vector!=0)
+    particula avatar1 = arrayAvatar.get(id);
+
+    for (int i = arrayAvatar.size(); i-- > id; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+    {
+      particula avatar2 = arrayAvatar.get(i);
+      float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
+      if (vector!=0)
       {
         float distance = sqrt(vector);
         if (distance < minimumGetAwayDistance)
         {
-          if(distance < closestDistance)
+          if (distance < closestDistance)
           {
-             closestDistance = distance;
-             closestAvatar = i;
-             socialDistancing = true;
+            closestDistance = distance;
+            closestAvatar = i;
+            socialDistancing = true;
           }
         }
       }
     }
-  
-  particula avatar2 = arrayAvatar.get(0);
-  // Comprovación con el Lider
-  float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
+
+    particula avatar2 = arrayAvatar.get(0);
+    // Comprovación con el Lider
+    float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
     if (vector!=0)
     {
       float distance = sqrt(vector);
       if (distance < minimumGetAwayDistance)
       {
-        if(distance < closestDistance)
+        if (distance < closestDistance)
         {
-           closestDistance = distance;
-           closestAvatar = 0;
-           socialDistancing = true;
+          closestDistance = distance;
+          closestAvatar = 0;
+          socialDistancing = true;
         }
       }
     }
-    if(socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
+    if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
     {
-        avatar2 = arrayAvatar.get(closestAvatar);
-        calculatedVector = calculateUnitVector(avatar2.pos,avatar1.pos);
+      avatar2 = arrayAvatar.get(closestAvatar);
+      calculatedVector = calculateUnitVector(avatar2.pos, avatar1.pos);
     }
   }
   //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
@@ -112,7 +112,7 @@ PVector calculateFlockCenter() // Promedio entre todos los avatares
   calculatedPosition = new PVector(0.0, 0.0, 0.0);
 
   //Se suman las posiciones de todos los avatares
-  
+
   for (int i = arrayAvatar.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
   {
     particula avatar = arrayAvatar.get(i);
@@ -120,7 +120,7 @@ PVector calculateFlockCenter() // Promedio entre todos los avatares
     calculatedPosition.y += avatar.pos.y;
     calculatedPosition.z += avatar.pos.z;
   }
-  
+
   //Se dividen esa suma por el total de avatares que haya
   calculatedPosition.x /= arrayAvatar.size();
   calculatedPosition.y /= arrayAvatar.size();

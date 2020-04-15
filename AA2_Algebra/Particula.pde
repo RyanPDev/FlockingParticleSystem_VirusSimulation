@@ -23,8 +23,8 @@ class particula {
     size = t;
     radius = size/2;
     colorP = c;
-    
-//idNumber = id;
+
+    //idNumber = id;
     rotation = new PVector(35.26, -45, 0);
     //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
     leader = 0; // No es lider al nacer 
@@ -36,12 +36,11 @@ class particula {
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
     randomConstantTotalTime = 5000; // 5 segundos
-    
   }
   // METODOS
   void move() //SOLVER (motor de inferencia numerica) Empleamos un EULER
   {
-    
+
     // 1- Fuerza y Aceleracion
     PVector acel, goalVector, leaderVector, flockVector, getAwayVector, randomVector;
     acel = new PVector(0.0, 0.0, 0.0);
@@ -170,26 +169,26 @@ class particula {
     box(goalSize);
     popMatrix();
   }
-  
+
   void turnIntoLeader()
   {
-    if(leader != 1)
+    if (leader != 1)
     {
-       leader = 1;
-       size = leaderSize;
-       radius = size/2;
-       colorP = color (255, 255, 0);
-       speedLimit = leaderSpeedLimit;
-        KR = 0.25;
-        KM = 1- KR;
-        posLeader.x = pos.x;
-        posLeader.y = pos.y; 
-        posLeader.z = pos.z;
+      leader = 1;
+      size = leaderSize;
+      radius = size/2;
+      colorP = color (255, 255, 0);
+      speedLimit = leaderSpeedLimit;
+      KR = 0.25;
+      KM = 1- KR;
+      posLeader.x = pos.x;
+      posLeader.y = pos.y; 
+      posLeader.z = pos.z;
     }
   }
   void updateId(int id)
   {
-     idNumber = id; 
+    idNumber = id;
   }
   void randomConstant()
   {
@@ -210,14 +209,22 @@ class particula {
 
   void collisionParticleFood()  
   {
-    if(arrayFood.size() != 0)
+    if (arrayFood.size() != 0)
     {
-    for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
-    {
-      Food food = arrayFood.get(i);
-     //pos = food.pos
-      eraseFood(i);
-    }
+      for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+      {
+        Food food = arrayFood.get(i);
+        float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
+        if (vector!=0)
+        {
+          float distance = sqrt(vector);
+          if (distance < minimumGetAwayDistance)
+          {
+            pos = food.pos;
+            eraseFood(i);
+          }
+        }
+      }
     }
   }
 

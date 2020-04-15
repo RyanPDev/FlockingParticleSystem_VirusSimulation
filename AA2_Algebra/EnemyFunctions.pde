@@ -25,6 +25,6 @@ void enemyInteraction() // Funcion que controla el comportamiento del enemigo
 
 void eraseEnemy(int num)
 {
-  if(arrayEnemies.size() != 0)
+  if (arrayEnemies.size() != 0)
     arrayEnemies.remove(num);
 }
