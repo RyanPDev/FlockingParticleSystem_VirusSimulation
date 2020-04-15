@@ -51,53 +51,105 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     }
     updateCameraLookAt();
   }
+  //////////////////////////////////////////////////////////////////////////////
   if ((key == '+') && gamePhase != Phase.STARTING)
   {
-    if (!enemyCreated)
+    if(selectedObjectType == ObjectType.AVATAR)
     {
-      enemyCreated = true;
-      createEnemy();
-    } 
+      if (!somethingCreated)
+      {
+        somethingCreated = true;
+        createAvatar();
+      } 
+    }
+    else if(selectedObjectType == ObjectType.ENEMY)
+    {
+      if (!somethingCreated)
+      {
+        somethingCreated = true;
+        createEnemy();
+      } 
+    }
+    else if(selectedObjectType == ObjectType.FOOD)
+    {
+      if (!somethingCreated)
+      {
+        somethingCreated = true;
+        createFood();
+      } 
+    }
   }
   if ((key == '-') && gamePhase != Phase.STARTING)
   {
-    if (!enemyErased)
+    if(selectedObjectType == ObjectType.AVATAR)
     {
-      enemyErased = true;
-      eraseEnemy();
-    } 
-  }
-  if ((key == 'f' || key == 'F') && gamePhase != Phase.STARTING)
-  {
-    if (!foodCreated)
+      if (!somethingErased)
+      {
+        somethingErased = true;
+        eraseAvatar(0);
+      } 
+    }
+    else if(selectedObjectType == ObjectType.ENEMY)
     {
-      foodCreated = true;
-      createFood();
-    } 
+      if (!somethingErased)
+      {
+        somethingErased = true;
+        eraseEnemy(0);
+      } 
+    }
+    else if(selectedObjectType == ObjectType.FOOD)
+    {
+      if (!somethingErased)
+      {
+        somethingErased = true;
+        eraseFood(0);
+      } 
+    }   
   }
+  if ((key == ' ') && gamePhase != Phase.STARTING)
+    {
+      if(!changedSelectedObject)
+      {
+       changedSelectedObject = true;
+       if(selectedObjectType == ObjectType.AVATAR)
+       {
+         selectedObjectType = ObjectType.ENEMY;
+       }
+       else if(selectedObjectType == ObjectType.ENEMY)
+       {
+         selectedObjectType = ObjectType.FOOD;
+       }
+       else if(selectedObjectType == ObjectType.FOOD)
+       {
+         selectedObjectType = ObjectType.AVATAR;
+       }
+      }
+    }
+  
+  
   
 }
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
 {
     if ((key == '+') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
     {
-      if (enemyCreated)
+      if (somethingCreated)
       {
-        enemyCreated = false;
+        somethingCreated = false;
       }
     }
     if ((key == '-') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
   {
-    if (enemyErased)
+    if (somethingErased)
     {
-      enemyErased = false;
+      somethingErased = false;
     } 
   }
-  if ((key == 'f' || key == 'F') && gamePhase != Phase.STARTING)
+   if ((key == ' ') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
   {
-    if (foodCreated)
+    if (changedSelectedObject)
     {
-      foodCreated = false;
+      changedSelectedObject = false;
     } 
   }
 }
@@ -119,7 +171,7 @@ void drawHUD() // Funcion que pone el mensaje
     rect(18,0,375,25);
     
     fill(0,255);
-    text("Press 'H' to show simulation controls", 20, 20);
+    text(showControlsText, 20, 20);
     if(showRedArrow)
     {
       
@@ -132,9 +184,18 @@ void drawHUD() // Funcion que pone el mensaje
   else
   {
     rect(18,0,708,250);
+    rect(18,0,708,250);
+    rect(width -600, height - 150 , width - 180, height - 50);
+    rect(width -600, height - 150 , width - 180, height - 50);
+    
     fill(0,255);
-    text("Press 'P' to Pause/Unpause\nPress 'V' to focus on the goal or back to default\nPress 'R' for Random Mode\nRandom mode->(Every 3 seconds, every avatar will behave differently)\nDrag with Left Click to rotate camera\nSpin Mouse Wheel to Zoom\nPress Mouse Wheel and drag to move Camera\nPres 'H' to hide controls", (20), 20);
-  }
+    
+    text(simulationControlsText+cameraControlsText, (20), 20);
+    textAlign(LEFT,CENTER);
+    text(addingControlText, (width - 600), height - 100);
+    
+      
+}
   
   
   if (gamePhase == Phase.PAUSE)
@@ -149,5 +210,37 @@ void drawHUD() // Funcion que pone el mensaje
     textSize(30); 
     text("Random Mode: ON", (width - 20), 60);
   }
+  
+  textAlign(CENTER, CENTER);
+  
+  textSize(15); 
+  if(selectedObjectType == ObjectType.AVATAR)
+    {
+      textSize(35);
+      fill(0,0,255);
+    }
+  text("AVATAR", (width - 100), height - 150);
+  textSize(15);
+  fill(0);
+  if(selectedObjectType == ObjectType.ENEMY)
+    {
+      textSize(35);
+      fill(255,0,0);
+    }
+  text("ENEMY", (width - 100), height - 110);
+  textSize(15);
+  fill(0);
+  if(selectedObjectType == ObjectType.FOOD)
+    {
+      textSize(35);
+      fill(0,255,0);
+    }
+  text("FOOD", (width - 100), height - 70);
+  textSize(15);
+  fill(0);
+  
+  
+  
+  
   cam.endHUD(); // always!
 }

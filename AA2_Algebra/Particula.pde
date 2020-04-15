@@ -10,25 +10,23 @@ class particula {
   color colorP;
   PVector randomMovementPosition;
   int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
-  float speedLimit = 4;
-
+  float speedLimit = 2.5;
+  float leaderSpeedLimit = speedLimit * 1.5;
   float randomConstantCurrentTime;
   float randomConstantTotalTime;
 
-  particula(PVector p, PVector v, float m, float t, color c, int l, int id)
+  particula(PVector p, PVector v, float m, float t, color c)
   {
     pos = p;
     vel = v;
     mass = m;
     size = t;
     colorP = c;
-    leader = l;
-    idNumber = id;
+    
+//idNumber = id;
     rotation = new PVector(35.26, -45, 0);
     //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
-    // KL = random(0, 0.8); // Lider
-    //   KM = random(0, 1-KL);  // Meta
-    //  KB = 1-(KM+KL); // Bandada
+    leader = 0; // No es lider al nacer 
     KL = random(0.3, 0.5);
     KM = random(0.2, 0.4);
     KB = 1-(KM+KL);
@@ -37,17 +35,12 @@ class particula {
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
     randomConstantTotalTime = 5000; // 5 segundos
-    if (leader == 1)
-    {
-      speedLimit = speedLimit*1.5;
-      KR = 0.35;
-      KM = 1- KR;
-      //leaderSize = t;
-    }
+    
   }
   // METODOS
   void move() //SOLVER (motor de inferencia numerica) Empleamos un EULER
   {
+    
     // 1- Fuerza y Aceleracion
     PVector acel, goalVector, leaderVector, flockVector, getAwayVector, randomVector;
     acel = new PVector(0.0, 0.0, 0.0);
@@ -176,7 +169,26 @@ class particula {
     box(goalSize);
     popMatrix();
   }
-
+  
+  void turnIntoLeader()
+  {
+    if(leader != 1)
+    {
+       leader = 1;
+       size = leaderSize;
+       colorP = color (255, 255, 0);
+       speedLimit = leaderSpeedLimit;
+        KR = 0.25;
+        KM = 1- KR;
+        posLeader.x = pos.x;
+        posLeader.y = pos.y; 
+        posLeader.z = pos.z;
+    }
+  }
+  void updateId(int id)
+  {
+     idNumber = id; 
+  }
   void randomConstant()
   {
     if (millis() - randomConstantCurrentTime >= randomConstantTotalTime)
@@ -194,7 +206,8 @@ class particula {
     }
   }
 
-  void collisionParticleFood() {
+  void collisionParticleFood() 
+  {
     for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
     {
       eraseFood(i);
