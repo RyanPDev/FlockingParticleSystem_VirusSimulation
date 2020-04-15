@@ -6,7 +6,7 @@ class particula {
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
-  float mass, size, KL, KB, KM, KA, KR; 
+  float mass, size, KL, KB, KM, KA, KR, radius; 
   color colorP;
   PVector randomMovementPosition;
   int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
@@ -21,6 +21,7 @@ class particula {
     vel = v;
     mass = m;
     size = t;
+    radius = size/2;
     colorP = c;
     
 //idNumber = id;
@@ -176,6 +177,7 @@ class particula {
     {
        leader = 1;
        size = leaderSize;
+       radius = size/2;
        colorP = color (255, 255, 0);
        speedLimit = leaderSpeedLimit;
         KR = 0.25;
@@ -206,11 +208,16 @@ class particula {
     }
   }
 
-  void collisionParticleFood() 
+  void collisionParticleFood()  
   {
+    if(arrayFood.size() != 0)
+    {
     for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
     {
+      Food food = arrayFood.get(i);
+     //pos = food.pos
       eraseFood(i);
+    }
     }
   }
 
