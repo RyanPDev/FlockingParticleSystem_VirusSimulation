@@ -6,18 +6,25 @@ import peasy.*;
 float inc_t;
 
 //Posiciones de la meta y el avatar lider
-particula[] particulaArray = new particula[10];
+//particula[] particulaArray = new particula[10];
+ArrayList<particula> arrayAvatar = new ArrayList(); // Lista de enemigos
+
+boolean somethingCreated = false;
+boolean somethingErased = false;
+boolean changedSelectedObject = false;
+
 PVector posGoal, posLeader;
 float leaderInitialSpeed;
 //xd
 
 ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de enemigos
-boolean enemyCreated = false;
-boolean enemyErased = false;
+
 
 ArrayList<Food> arrayFood = new ArrayList();
 boolean foodCreated = false;
 
+enum ObjectType{AVATAR, ENEMY, FOOD};
+ObjectType selectedObjectType;
 //Tamaño del mundo
 float worldBoundaryX;
 float worldBoundaryY;
@@ -56,11 +63,17 @@ float enemySize;
 float foodSize;
 float leaderSize; // Tamaño del lider
 
+// Strings
+
+String showControlsText = "Press 'H' to show simulation controls";
+String simulationControlsText= "Press 'P' to Pause/Unpause\nPress 'V' to focus on the goal or back to default\nPress 'R' for Random Mode\nRandom mode->(Every 3 seconds, every avatar will behave differently)\nPres 'H' to hide controls";
+String addingControlText = "Press 'SPACE' to change the object selected\nPress '+' or '-' to add or delete somtheing\ndepending on what you are selecting";
+String cameraControlsText= "\nDrag with Left Click to rotate camera\nSpin Mouse Wheel to Zoom\nPress Mouse Wheel and drag to move Camera\n";
 //Zona de SetUp
 void setup()
 {
   gamePhase = Phase.STARTING;
-
+  selectedObjectType = ObjectType.AVATAR;
   size(1000, 700, P3D);
 
   // Tamaño del mundo
@@ -90,7 +103,7 @@ void setup()
   foodSize = 20;
 
   // Lider
-  particulaArray[0] = new particula(
+  /*particulaArray[0] = new particula(
     new PVector (0.0, 0.0, 0.0), // Posicion
     new PVector (0.0, 0.0, 0.0), // Velocidad Inicial
     1.0, // Massa
@@ -111,7 +124,7 @@ void setup()
       color(0, random(255), 0), 
       0, 
       i);
-  }
+  }*/
   //Inicializar ciertos valores
 
   posGoal = new PVector(0, 0, 0);
@@ -138,16 +151,7 @@ void draw()
 
   drawWorldBoundaries(); // Dibuja el cubo que representa los limites del mundo
 
-  for (int i = 0; i < particulaArray.length; i++) 
-  {
-    // Calcular
-    if (gamePhase == Phase.SIMULATION)
-    {
-      particulaArray[i].move();
-    }
-    // Dibujar
-    particulaArray[i].drawParticle();
-  }
+  avatarInteraction();
 
   enemyInteraction();
   foodInteraction();
