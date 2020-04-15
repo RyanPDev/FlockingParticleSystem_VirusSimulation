@@ -6,10 +6,10 @@ class Enemy {
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
-  float mass, size, KM,KB,KA, minimumDistance; 
+  float mass, size, KM, KB, KA, minimumDistance; 
   color colorP;
   PVector randomMovementPosition;
-  
+
   float speedLimit = 2;
 
   float randomConstantCurrentTime;
@@ -24,20 +24,19 @@ class Enemy {
     colorP = c;
     idNumber = id;
     rotation = new PVector(35.26, -45, 0);
-    
-    
+
+
     KM = 1;
     KB = 2;
     KA = 4;
-    
-   minimumDistance = size * 1.3;
+
+    minimumDistance = size * 1.3;
 
     randomMovementPosition = new PVector(0, 0, 0);
     randomMovementPosition = calculateRandomPosition();
-    
+
     randomConstantCurrentTime = 0;
     randomConstantTotalTime = 5000; // 5 segundos
-  
   }
   // METODOS
   void move() //SOLVER (motor de inferencia numerica) Empleamos un EULER
@@ -49,23 +48,23 @@ class Enemy {
     getAwayVector = new PVector(0.0, 0.0, 0.0);
     randomVector = new PVector(0.0, 0.0, 0.0);
     //Si soy lider voy a la meta
-  
-    
-      
-    if(randomMode)
+
+
+
+    if (randomMode)
       randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
     newRandomPosition();
     randomVector = calculateUnitVector(pos, randomMovementPosition);
     particleVector = calculateNearParticleVector();
-     
+
     //getAwayVector = calculateNearParticleVector();
     // MEDIA PONDERADA
 
     acel.x += KM * randomVector.x + KB * particleVector.x + KA * getAwayVector.x;
     acel.y += KM * randomVector.y + KB * particleVector.y + KA * getAwayVector.y;
     acel.z += KM * randomVector.z + KB * particleVector.z + KA * getAwayVector.z;
-    
-    
+
+
     // NEWTON Suma Fuerzas = masa x Aceleracion
     acel.x /= mass;
     acel.y /= mass;
@@ -107,33 +106,28 @@ class Enemy {
     pos.x = pos.x + vel.x * inc_t;
     pos.y = pos.y + vel.y * inc_t;
     pos.z = pos.z + vel.z * inc_t;
-    
-    if(pos.x > worldBoundaryX - size)
-    {
-       pos.x = worldBoundaryX - size; 
-    }
-    else if(pos.x < 0 + size)
-    {
-       pos.x = 0 + size;
-    }
-    if(pos.y > worldBoundaryY - size)
-    {
-       pos.y = worldBoundaryY - size; 
-    }
-    else if(pos.y < 0 + size)
-    {
-       pos.y = 0 + size;
-    }
-    if(pos.z > worldBoundaryZ - size)
-    {
-       pos.z = worldBoundaryZ - size; 
-    }
-    else if(pos.z < 0 + size)
-    {
-       pos.z = 0 + size;
-    }
 
-   
+    if (pos.x > worldBoundaryX - size)
+    {
+      pos.x = worldBoundaryX - size;
+    } else if (pos.x < 0 + size)
+    {
+      pos.x = 0 + size;
+    }
+    if (pos.y > worldBoundaryY - size)
+    {
+      pos.y = worldBoundaryY - size;
+    } else if (pos.y < 0 + size)
+    {
+      pos.y = 0 + size;
+    }
+    if (pos.z > worldBoundaryZ - size)
+    {
+      pos.z = worldBoundaryZ - size;
+    } else if (pos.z < 0 + size)
+    {
+      pos.z = 0 + size;
+    }
   }
 
   void drawRandomDirection() // pinta la meta
@@ -151,19 +145,19 @@ class Enemy {
 
   void randomConstant() //////////////////////////
   {
-  /*if (millis() - randomConstantCurrentTime >= randomConstantTotalTime)
-    {
-      KL = random(0, 1); // Lider
-      KM = random(0, 1-KL);  // Meta
-      KB = 1-(KM+KL); // Bandada
-      randomConstantCurrentTime = millis();
-      if (idNumber >= 1)
-      {
-        println("id: "+idNumber+" KL: "+KL+" KM: "+KM+" KB: "+KB);
-        
-        //println("CAMBIO");
-      }
-    }*/
+    /*if (millis() - randomConstantCurrentTime >= randomConstantTotalTime)
+     {
+     KL = random(0, 1); // Lider
+     KM = random(0, 1-KL);  // Meta
+     KB = 1-(KM+KL); // Bandada
+     randomConstantCurrentTime = millis();
+     if (idNumber >= 1)
+     {
+     println("id: "+idNumber+" KL: "+KL+" KM: "+KM+" KB: "+KB);
+     
+     //println("CAMBIO");
+     }
+     }*/
   }
 
   void drawParticle()
@@ -173,85 +167,84 @@ class Enemy {
 
     translate(pos.x, pos.y, pos.z);
 
-    
+
     noFill();
     stroke(colorP);
     strokeWeight(1);
 
     sphere(size);
-/*
+    /*
     strokeWeight(5);
-    //Eje X
-    stroke(255, 0, 0);
-    line(0, 0, 0, 100, 0, 0);
-
-    //Eje Y
-    stroke(0, 255, 0);
-    line(0, 0, 0, 0, -100, 0);
-
-    //Eje Z
-    stroke(0, 0, 255);
-    line(0, 0, 0, 0, 0, 100);
-*/
+     //Eje X
+     stroke(255, 0, 0);
+     line(0, 0, 0, 100, 0, 0);
+     
+     //Eje Y
+     stroke(0, 255, 0);
+     line(0, 0, 0, 0, -100, 0);
+     
+     //Eje Z
+     stroke(0, 0, 255);
+     line(0, 0, 0, 0, 0, 100);
+     */
     popMatrix();
   }
-  
+
   void newRandomPosition()
   {
     float vector = sq(pos.x - randomMovementPosition.x)+sq(pos.y - randomMovementPosition.y)+sq(pos.z - randomMovementPosition.z);
-     if(vector != 0)
-     {
-       float distance = sqrt(vector);
-        if (distance < minimumDistance)
-        {
-          randomMovementPosition = calculateRandomPosition();
-        }
-     }
-     else
-     {
-       randomMovementPosition = calculateRandomPosition();
-     }
-  }
-  
-  PVector calculateNearParticleVector()
-{
-  PVector calculatedVector;
-  calculatedVector = new PVector(0.0, 0.0, 0.0);
-  
-  int closestAvatar = 0;
-  float minimumGetAwayDistance = enemySize * 5;
-  float closestDistance = minimumGetAwayDistance;
-  boolean socialDistancing = false;
-
-  //Se suman las posiciones de todos los avatares
-  
-  for (int i = arrayAvatar.size(); i-- > 0;)
-  {
-     particula avatar = arrayAvatar.get(i);
-     float vector = sq(pos.x - avatar.pos.x)+sq(pos.y - avatar.pos.y)+sq(pos.z - avatar.pos.z);
-    
-    if (vector!=0)
+    if (vector != 0)
     {
       float distance = sqrt(vector);
-      if (distance < minimumGetAwayDistance)
+      if (distance < minimumDistance)
       {
-        if(distance < closestDistance)
-        {
-           closestDistance = distance;
-           closestAvatar = i;
-           socialDistancing = true;
-        }
+        randomMovementPosition = calculateRandomPosition();
       }
+    } else
+    {
+      randomMovementPosition = calculateRandomPosition();
     }
-  } 
-  if(socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
-  {
-      particula avatar = arrayAvatar.get(closestAvatar);
-      calculatedVector = calculateUnitVector(pos, avatar.pos);
   }
 
-  //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
+  PVector calculateNearParticleVector()
+  {
+    PVector calculatedVector;
+    calculatedVector = new PVector(0.0, 0.0, 0.0);
 
-  return calculatedVector;
-}
+    int closestAvatar = 0;
+    float minimumGetAwayDistance = enemySize * 5;
+    float closestDistance = minimumGetAwayDistance;
+    boolean socialDistancing = false;
+
+    //Se suman las posiciones de todos los avatares
+
+    for (int i = arrayAvatar.size(); i-- > 0; )
+    {
+      particula avatar = arrayAvatar.get(i);
+      float vector = sq(pos.x - avatar.pos.x)+sq(pos.y - avatar.pos.y)+sq(pos.z - avatar.pos.z);
+
+      if (vector!=0)
+      {
+        float distance = sqrt(vector);
+        if (distance < minimumGetAwayDistance)
+        {
+          if (distance < closestDistance)
+          {
+            closestDistance = distance;
+            closestAvatar = i;
+            socialDistancing = true;
+          }
+        }
+      }
+    } 
+    if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
+    {
+      particula avatar = arrayAvatar.get(closestAvatar);
+      calculatedVector = calculateUnitVector(pos, avatar.pos);
+    }
+
+    //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
+
+    return calculatedVector;
+  }
 }
