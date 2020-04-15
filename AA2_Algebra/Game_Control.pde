@@ -59,7 +59,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingCreated)
       {
         somethingCreated = true;
-        createAvatar();
+        createAvatar(new PVector(0,0,0));
       } 
     }
     else if(selectedObjectType == ObjectType.ENEMY)
