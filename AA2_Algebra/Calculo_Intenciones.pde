@@ -54,15 +54,16 @@ PVector calculateAvatarVector(int id)
   float minimumGetAwayDistance = leaderSize * 3;
   float closestDistance = minimumGetAwayDistance;
   boolean socialDistancing = false;
-
-  //Se suman las posiciones de todos los avatares
-  if (id != particulaArray.length)
+  
+  if(id < arrayAvatar.size())
   {
-    for (int i = id+1; i < particulaArray.length; i++) /////////////////////////////////////////////////////////
-    {
-      float vector = sq(particulaArray[id].pos.x - particulaArray[i].pos.x)+sq(particulaArray[id].pos.y - particulaArray[i].pos.y)+sq(particulaArray[id].pos.z - particulaArray[i].pos.z);
-      
-      if (vector!=0)
+  particula avatar1 = arrayAvatar.get(id);
+  
+  for (int i = arrayAvatar.size(); i-- > id; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+  {
+    particula avatar2 = arrayAvatar.get(i);
+    float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
+     if (vector!=0)
       {
         float distance = sqrt(vector);
         if (distance < minimumGetAwayDistance)
@@ -76,9 +77,10 @@ PVector calculateAvatarVector(int id)
         }
       }
     }
-  }
+  
+  particula avatar2 = arrayAvatar.get(0);
   // Comprovación con el Lider
-  float vector = sq(particulaArray[id].pos.x - particulaArray[0].pos.x)+sq(particulaArray[id].pos.y - particulaArray[0].pos.y)+sq(particulaArray[id].pos.z - particulaArray[0].pos.z);
+  float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
     if (vector!=0)
     {
       float distance = sqrt(vector);
@@ -94,9 +96,10 @@ PVector calculateAvatarVector(int id)
     }
     if(socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
     {
-        calculatedVector = calculateUnitVector(particulaArray[closestAvatar].pos,particulaArray[id].pos);
+        avatar2 = arrayAvatar.get(closestAvatar);
+        calculatedVector = calculateUnitVector(avatar2.pos,avatar1.pos);
     }
-
+  }
   //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
 
   return calculatedVector;
@@ -109,17 +112,19 @@ PVector calculateFlockCenter() // Promedio entre todos los avatares
   calculatedPosition = new PVector(0.0, 0.0, 0.0);
 
   //Se suman las posiciones de todos los avatares
-  for (int i = 0; i< particulaArray.length; i++) /////////////////////////////////////////////////////////
+  
+  for (int i = arrayAvatar.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
   {
-    calculatedPosition.x += particulaArray[i].pos.x;
-    calculatedPosition.y += particulaArray[i].pos.y;
-    calculatedPosition.z += particulaArray[i].pos.z;
+    particula avatar = arrayAvatar.get(i);
+    calculatedPosition.x += avatar.pos.x;
+    calculatedPosition.y += avatar.pos.y;
+    calculatedPosition.z += avatar.pos.z;
   }
-
+  
   //Se dividen esa suma por el total de avatares que haya
-  calculatedPosition.x /= 10;
-  calculatedPosition.y /= 10;
-  calculatedPosition.z /= 10;
+  calculatedPosition.x /= arrayAvatar.size();
+  calculatedPosition.y /= arrayAvatar.size();
+  calculatedPosition.z /= arrayAvatar.size();
 
   return calculatedPosition;
 }

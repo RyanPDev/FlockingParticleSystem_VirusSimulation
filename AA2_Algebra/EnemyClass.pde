@@ -225,9 +225,10 @@ class Enemy {
 
   //Se suman las posiciones de todos los avatares
   
-  for (int i = 0; i < particulaArray.length; i++) /////////////////////////////////////////////////////////
+  for (int i = arrayAvatar.size(); i-- > 0;)
   {
-    float vector = sq(pos.x - particulaArray[i].pos.x)+sq(pos.y - particulaArray[i].pos.y)+sq(pos.z - particulaArray[i].pos.z);
+     particula avatar = arrayAvatar.get(i);
+     float vector = sq(pos.x - avatar.pos.x)+sq(pos.y - avatar.pos.y)+sq(pos.z - avatar.pos.z);
     
     if (vector!=0)
     {
@@ -242,12 +243,11 @@ class Enemy {
         }
       }
     }
-  }
-  
-  
+  } 
   if(socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
   {
-      calculatedVector = calculateUnitVector(pos, particulaArray[closestAvatar].pos);
+      particula avatar = arrayAvatar.get(closestAvatar);
+      calculatedVector = calculateUnitVector(pos, avatar.pos);
   }
 
   //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0

@@ -20,5 +20,6 @@ void foodInteraction() {
 
 void eraseFood(int food)
 {
-  arrayFood.remove(food);
+  if(arrayFood.size() != 0)
+    arrayFood.remove(food);
 }
