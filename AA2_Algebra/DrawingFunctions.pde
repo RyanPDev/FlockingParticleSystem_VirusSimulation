@@ -15,11 +15,7 @@ void drawWorldBoundaries() //Dibuja el cubo de los limites
 {
   pushMatrix();
   translate(0, 0, 0);
-  //stroke(0, 255, 255);
-  //sphere(20);
   translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
-  //rotateX(radians(-35.26));
-  // rotateY(radians(-45));
   stroke(0, 0, 255);
   strokeWeight(5);
   noFill();

@@ -3,10 +3,7 @@ class Enemy {
 
   PVector pos, vel, rotation;
   int idNumber;
-  // KL = Seguimiento de lider; 
-  // KB = Acercamiento a la bandada; 
-  // KM = acercamiento a la meta
-  float mass, size, KM, KB, KA, minimumDistance; 
+  float mass, size, KM, KV, KA, minimumDistance; 
   color colorP;
   PVector randomMovementPosition;
 
@@ -24,9 +21,9 @@ class Enemy {
     colorP = c;
     rotation = new PVector(35.26, -45, 0);
 
-    KM = 1;
-    KB = 2;
-    KA = 4;
+    KM = 0.125;
+    KV = 0.25;
+    KA = 0.5;
 
     minimumDistance = size * 1.3;
 
@@ -56,9 +53,9 @@ class Enemy {
     //getAwayVector = calculateNearParticleVector();
     // MEDIA PONDERADA
 
-    acel.x += KM * randomVector.x + KB * particleVector.x + KA * getAwayVector.x;
-    acel.y += KM * randomVector.y + KB * particleVector.y + KA * getAwayVector.y;
-    acel.z += KM * randomVector.z + KB * particleVector.z + KA * getAwayVector.z;
+    acel.x += KM * randomVector.x + KV * particleVector.x + KA * getAwayVector.x;
+    acel.y += KM * randomVector.y + KV * particleVector.y + KA * getAwayVector.y;
+    acel.z += KM * randomVector.z + KV * particleVector.z + KA * getAwayVector.z;
 
 
     // NEWTON Suma Fuerzas = masa x Aceleracion
@@ -127,7 +124,7 @@ class Enemy {
   }
 
 
- 
+
   void drawParticle()
   {
 
@@ -141,64 +138,49 @@ class Enemy {
     strokeWeight(1);
 
     sphere(size);
-    /*
-    strokeWeight(5);
-     //Eje X
-     stroke(255, 0, 0);
-     line(0, 0, 0, 100, 0, 0);
-     
-     //Eje Y
-     stroke(0, 255, 0);
-     line(0, 0, 0, 0, -100, 0);
-     
-     //Eje Z
-     stroke(0, 0, 255);
-     line(0, 0, 0, 0, 0, 100);
-     */
+ 
     popMatrix();
   }
-  
+
   PVector calculateEnemyVector()
-{
-  PVector calculatedVector;
-  calculatedVector = new PVector(0.0, 0.0, 0.0);
-
-  int closestEnemy = 0;
-  float minimumGetAwayDistance = enemySize * 2.5;
-  float closestDistance = minimumGetAwayDistance;
-  boolean socialDistancing = false;
-
-  if (idNumber < arrayEnemies.size())
   {
-    for (int i = arrayEnemies.size(); i-- > idNumber; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+    PVector calculatedVector;
+    calculatedVector = new PVector(0.0, 0.0, 0.0);
+
+    int closestEnemy = 0;
+    float minimumGetAwayDistance = enemySize * 2.5;
+    float closestDistance = minimumGetAwayDistance;
+    boolean socialDistancing = false;
+
+    if (idNumber < arrayEnemies.size())
     {
-      Enemy enemy2 = arrayEnemies.get(i);
-      float vector = sq(pos.x - enemy2.pos.x)+sq(pos.y - enemy2.pos.y)+sq(pos.z - enemy2.pos.z);
-      if (vector!=0)
+      for (int i = arrayEnemies.size(); i-- > idNumber; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
       {
-        float distance = sqrt(vector);
-        if (distance < minimumGetAwayDistance)
+        Enemy enemy2 = arrayEnemies.get(i);
+        float vector = sq(pos.x - enemy2.pos.x)+sq(pos.y - enemy2.pos.y)+sq(pos.z - enemy2.pos.z);
+        if (vector!=0)
         {
-          if (distance < closestDistance)
+          float distance = sqrt(vector);
+          if (distance < minimumGetAwayDistance)
           {
-            closestDistance = distance;
-            closestEnemy = i;
-            socialDistancing = true;
+            if (distance < closestDistance)
+            {
+              closestDistance = distance;
+              closestEnemy = i;
+              socialDistancing = true;
+            }
           }
         }
-      
+      }
+      if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
+      {
+        Enemy enemy2 = arrayEnemies.get(closestEnemy);
+        calculatedVector = calculateUnitVector(enemy2.pos, pos);
+      }
+      //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
     }
-    
+    return calculatedVector;
   }
-  if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
-    {
-      Enemy enemy2 = arrayEnemies.get(closestEnemy);
-      calculatedVector = calculateUnitVector(enemy2.pos, pos);
-    }
-  //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
-  }
-  return calculatedVector;
-}
 
   void updateId(int id)
   {
