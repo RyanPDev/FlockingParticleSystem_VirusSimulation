@@ -102,6 +102,32 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       }
     }
   }
+  if ((key == '0') && gamePhase != Phase.STARTING)
+  {
+    if (selectedObjectType == ObjectType.AVATAR)
+    {
+      if (!somethingErased)
+      {
+        somethingErased = true;
+        arrayAvatar.clear();
+      }
+    } else if (selectedObjectType == ObjectType.ENEMY)
+    {
+      if (!somethingErased)
+      {
+        somethingErased = true;
+        arrayEnemies.clear();;
+      }
+    } else if (selectedObjectType == ObjectType.FOOD)
+    {
+      if (!somethingErased)
+      {
+        somethingErased = true;
+        arrayFood.clear();
+      }
+    }
+  }
+ 
   if ((key == ' ') && gamePhase != Phase.STARTING)
   {
     if (!changedSelectedObject)
@@ -129,7 +155,7 @@ void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que s
       somethingCreated = false;
     }
   }
-  if ((key == '-') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  if ((key == '-' || key == '0' ) && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
   {
     if (somethingErased)
     {
@@ -143,92 +169,4 @@ void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que s
       changedSelectedObject = false;
     }
   }
-}
-
-
-void drawHUD() // Funcion que pone el mensaje
-{
-
-  cam.beginHUD();
-  // now draw things that you want relative to the camera's position and orientation
-  textSize(20);
-  textAlign(LEFT);
-  strokeWeight(1);
-  fill(205, 255, 255, 150);
-  rectMode(CORNERS);
-
-  if (!showControls)
-  {
-    rect(18, 0, 375, 25);
-
-    fill(0, 255);
-    text(showControlsText, 20, 20);
-    if (showRedArrow)
-    {
-
-      fill(255, 0, 0, 255);
-      text("<---", 380, 20);
-
-      fill(0, 255);
-    }
-  } else
-  {
-    rect(18, 0, 708, 250);
-    rect(18, 0, 708, 250);
-    rect(width -600, height - 150, width - 180, height - 50);
-    rect(width -600, height - 150, width - 180, height - 50);
-
-    fill(0, 255);
-
-    text(simulationControlsText+cameraControlsText, (20), 20);
-    textAlign(LEFT, CENTER);
-    text(addingControlText, (width - 600), height - 100);
-  }
-
-
-  if (gamePhase == Phase.PAUSE)
-  {
-    textAlign(RIGHT);
-    textSize(30); 
-    text("Pause", (width - 20), 30);
-  }
-  if (randomMode)
-  {
-    textAlign(RIGHT);
-    textSize(30); 
-    text("Random Mode: ON", (width - 20), 60);
-  }
-
-  textAlign(CENTER, CENTER);
-
-  textSize(15); 
-  if (selectedObjectType == ObjectType.AVATAR)
-  {
-    textSize(35);
-    fill(0, 0, 255);
-  }
-  text("AVATAR", (width - 100), height - 150);
-  textSize(15);
-  fill(0);
-  if (selectedObjectType == ObjectType.ENEMY)
-  {
-    textSize(35);
-    fill(255, 0, 0);
-  }
-  text("ENEMY", (width - 100), height - 110);
-  textSize(15);
-  fill(0);
-  if (selectedObjectType == ObjectType.FOOD)
-  {
-    textSize(35);
-    fill(0, 255, 0);
-  }
-  text("FOOD", (width - 100), height - 70);
-  textSize(15);
-  fill(0);
-
-
-
-
-  cam.endHUD(); // always!
 }
