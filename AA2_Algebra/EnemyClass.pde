@@ -34,7 +34,7 @@ class Enemy {
     randomConstantTotalTime = 5000; // 5 segundos
   }
   // METODOS
-  void move() //SOLVER (motor de inferencia numerica) Empleamos un EULER
+  void move() //Mueve a los enemigos usando el solver de Euler
   {
     // 1- Fuerza y Aceleracion
     PVector acel, getAwayVector, randomVector, particleVector;
@@ -42,21 +42,17 @@ class Enemy {
     particleVector = new PVector(0.0, 0.0, 0.0);
     getAwayVector = new PVector(0.0, 0.0, 0.0);
     randomVector = new PVector(0.0, 0.0, 0.0);
-    //Si soy lider voy a la meta
-
 
     newRandomPosition();
     randomVector = calculateUnitVector(pos, randomMovementPosition);
     particleVector = calculateNearParticleVector();
     getAwayVector = calculateEnemyVector();
 
-    //getAwayVector = calculateNearParticleVector();
     // MEDIA PONDERADA
 
     acel.x += KM * randomVector.x + KV * particleVector.x + KA * getAwayVector.x;
     acel.y += KM * randomVector.y + KV * particleVector.y + KA * getAwayVector.y;
     acel.z += KM * randomVector.z + KV * particleVector.z + KA * getAwayVector.z;
-
 
     // NEWTON Suma Fuerzas = masa x Aceleracion
     acel.x /= mass;
@@ -64,7 +60,6 @@ class Enemy {
     acel.z /= mass;
 
     // 2- Velocidad
-
     vel.x = vel.x + acel.x * inc_t;
     vel.y = vel.y + acel.y * inc_t;
     vel.z = vel.z + acel.z * inc_t;
@@ -90,12 +85,8 @@ class Enemy {
     {
       vel.z = -speedLimit;
     }
-
-    //println(pos_lider.x,pos_lider.y,pos_lider.z);
-
-
-    // 3- Posicion
-
+    
+    // 3- Posicion; Se limita su posición dentro del mundo delimitado por el cubo
     pos.x = pos.x + vel.x * inc_t;
     pos.y = pos.y + vel.y * inc_t;
     pos.z = pos.z + vel.z * inc_t;
@@ -123,15 +114,11 @@ class Enemy {
     }
   }
 
-
-
-  void drawParticle()
+  void drawParticle() //Dibuja la particula
   {
-
     pushMatrix(); // Salvo el estado
 
     translate(pos.x, pos.y, pos.z);
-
 
     noFill();
     stroke(colorP);
@@ -142,7 +129,7 @@ class Enemy {
     popMatrix();
   }
 
-  PVector calculateEnemyVector()
+  PVector calculateEnemyVector() //Calcula el vector hacia la particula de su tipo mas cercana si se encuentra dentro de un rango maximo especificado
   {
     PVector calculatedVector;
     calculatedVector = new PVector(0.0, 0.0, 0.0);
@@ -172,24 +159,26 @@ class Enemy {
           }
         }
       }
+      
       if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
       {
         Enemy enemy2 = arrayEnemies.get(closestEnemy);
         calculatedVector = calculateUnitVector(enemy2.pos, pos);
       }
-      //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
+      //Si una particula esta muy cerca de otra, esta devolvera un vector en direccion contraria, si no hay ninguna, devuelve 0
     }
     return calculatedVector;
   }
 
-  void updateId(int id)
+  void updateId(int id) //Actualiza el identificador de cada particula
   {
     idNumber = id;
   }
 
-  void newRandomPosition()
+  void newRandomPosition() //Calcula una posicion aleatoria en la que se dirigir la particula. Si llega, le otorga otra.
   {
     float vector = sq(pos.x - randomMovementPosition.x)+sq(pos.y - randomMovementPosition.y)+sq(pos.z - randomMovementPosition.z);
+    
     if (vector != 0)
     {
       float distance = sqrt(vector);
@@ -203,7 +192,7 @@ class Enemy {
     }
   }
 
-  PVector calculateNearParticleVector()
+  PVector calculateNearParticleVector() //Detecta si hay una particula de virus dentro de su rango y devuelve su vector unitario
   {
     PVector calculatedVector;
     calculatedVector = new PVector(0.0, 0.0, 0.0);
@@ -214,7 +203,6 @@ class Enemy {
     boolean socialDistancing = false;
 
     //Se suman las posiciones de todos los avatares
-
     for (int i = arrayAvatar.size(); i-- > 0; )
     {
       particula avatar = arrayAvatar.get(i);
@@ -234,6 +222,7 @@ class Enemy {
         }
       }
     } 
+    
     if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
     {
       particula avatar = arrayAvatar.get(closestAvatar);
@@ -241,7 +230,6 @@ class Enemy {
     }
 
     //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
-
     return calculatedVector;
   }
 }

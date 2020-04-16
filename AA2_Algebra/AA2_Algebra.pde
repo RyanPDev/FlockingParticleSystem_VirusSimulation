@@ -15,12 +15,10 @@ boolean changedSelectedObject = false;
 
 PVector posGoal, posLeader;
 float leaderInitialSpeed;
-//xd
 
 ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de celulas inmunologicas
 
-
-ArrayList<Food> arrayFood = new ArrayList(); // Lista de celulas vulnerables
+ArrayList<Food> arrayVulnerableCell = new ArrayList(); // Lista de celulas vulnerables
 boolean foodCreated = false;
 
 enum ObjectType {
@@ -41,6 +39,7 @@ Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encu
 boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
 boolean randomMode = false; // Variable de control para controlar cuando el juego esta en modo random o no.
 boolean showRedArrow = true;
+
 //Cámara
 PGraphics3D g3;
 PeasyCam cam;
@@ -51,7 +50,6 @@ CamPhase cameraPhase; // La fase actual de la camara en la que se encuentra el j
 boolean cameraFollowGoal = false; // Variable de control para señalar que la camara está siguiendo a la meta
 long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
 boolean showControls;
-
 
 //Timers
 float randomPositionCurrentTime;
@@ -66,7 +64,6 @@ float foodSize;
 float leaderSize; // Tamaño del lider
 
 // Strings
-
 String showControlsText = "Press 'H' to show simulation controls";
 String simulationControlsText= "Press 'P' to Pause/Unpause\nPress 'C' to re-center de camera view\nPress 'R' for Random Mode\nRandom mode->(Every 5 seconds, every virus will behave differently)\n";
 String addingControlText = "Press 'SPACE' to change the object selected\nPress '+' or '-' to add or delete something\ndepending on what you are selecting\nYou can also Press '0'(zero) to eliminate\neveryone of that type";
@@ -105,7 +102,7 @@ void setup()
   foodSize = 20;
 
   posGoal = new PVector(0, 0, 0);
-  posGoal = calculateRandomPosition(); // Posicion random para la meta
+  posGoal = calculateRandomPosition(); //Posicion random para la meta
   checkIfGoalOutOfBounds();
   posLeader = new PVector(0.0, 0.0, 0.0);
   inc_t = 0.4;
@@ -130,17 +127,17 @@ void draw()
   rotateX(radians(-35.26));
   rotateY(radians(-45));
 
-  drawWorldBoundaries(); // Dibuja el cubo que representa los limites del mundo
+  drawWorldBoundaries(); //--> Pestaña DrawingFunctions
 
-  avatarInteraction();
+  avatarInteraction(); //--> Pestaña VirusFunctions
 
-  enemyInteraction();
-  foodInteraction();
+  enemyInteraction(); //--> Pestaña EnemyFunctions
+  vulnerableCellsInteraction(); //--> Pestaña VulnerableCellsFunctions
 
-  drawGoal();
-  collisionLeaderGoal();
+  drawGoal(); //--> Pestaña DrawingFunctions
+  collisionLeaderGoal(); //--> Pestaña GeneralFunctions
 
   popMatrix();
 
-  drawHUD();
+  drawHUD(); //--> Pestaña DrawingFunctions
 }

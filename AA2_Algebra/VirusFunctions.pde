@@ -25,14 +25,14 @@ void avatarInteraction() // Funcion que controla el comportamiento del enemigo
     if (gamePhase == Phase.SIMULATION)
     {
       avatar.move();
-      avatar.collisionParticleFood(); // --> Pestaña Particula
-      avatar.collisionParticleEnemy();
+      avatar.collisionParticleFood(); // --> Pestaña VirusClass
+      avatar.collisionParticleEnemy(); // --> Pestaña VirusClass
     }
-    avatar.drawParticle();
+    avatar.drawParticle(); // --> Pestaña VirusClass
   }
 }
 
-void eraseAvatar(int num)
+void eraseAvatar(int num) //Elimina la particula
 {
   if (arrayAvatar.size() != 0)
   {
