@@ -15,14 +15,13 @@ class Enemy {
   float randomConstantCurrentTime;
   float randomConstantTotalTime;
 
-  Enemy(PVector p, PVector v, float m, float t, color c, int id)
+  Enemy(PVector p, PVector v, float m, float t, color c)
   {
     pos = p;
     vel = v;
     mass = m;
     size = t;
     colorP = c;
-    idNumber = id;
     rotation = new PVector(35.26, -45, 0);
 
     KM = 1;
@@ -49,12 +48,10 @@ class Enemy {
     //Si soy lider voy a la meta
 
 
-
-    if (randomMode)
-      randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
     newRandomPosition();
     randomVector = calculateUnitVector(pos, randomMovementPosition);
     particleVector = calculateNearParticleVector();
+    getAwayVector = calculateEnemyVector();
 
     //getAwayVector = calculateNearParticleVector();
     // MEDIA PONDERADA
@@ -129,36 +126,8 @@ class Enemy {
     }
   }
 
-  void drawRandomDirection() // pinta la meta
-  {
-    pushMatrix();
-    translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
-    //rotateX(radians(-35.26));
-    //rotateY(radians(-45));
-    strokeWeight(8);
-    stroke(255, 215, 0);
-    noFill();
-    box(goalSize);
-    popMatrix();
-  }
 
-  void randomConstant() //////////////////////////
-  {
-    /*if (millis() - randomConstantCurrentTime >= randomConstantTotalTime)
-     {
-     KL = random(0, 1); // Lider
-     KM = random(0, 1-KL);  // Meta
-     KB = 1-(KM+KL); // Bandada
-     randomConstantCurrentTime = millis();
-     if (idNumber >= 1)
-     {
-     println("id: "+idNumber+" KL: "+KL+" KM: "+KM+" KB: "+KB);
-     
-     //println("CAMBIO");
-     }
-     }*/
-  }
-
+ 
   void drawParticle()
   {
 
@@ -187,6 +156,53 @@ class Enemy {
      line(0, 0, 0, 0, 0, 100);
      */
     popMatrix();
+  }
+  
+  PVector calculateEnemyVector()
+{
+  PVector calculatedVector;
+  calculatedVector = new PVector(0.0, 0.0, 0.0);
+
+  int closestEnemy = 0;
+  float minimumGetAwayDistance = enemySize * 2.5;
+  float closestDistance = minimumGetAwayDistance;
+  boolean socialDistancing = false;
+
+  if (idNumber < arrayEnemies.size())
+  {
+    for (int i = arrayEnemies.size(); i-- > idNumber; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+    {
+      Enemy enemy2 = arrayEnemies.get(i);
+      float vector = sq(pos.x - enemy2.pos.x)+sq(pos.y - enemy2.pos.y)+sq(pos.z - enemy2.pos.z);
+      if (vector!=0)
+      {
+        float distance = sqrt(vector);
+        if (distance < minimumGetAwayDistance)
+        {
+          if (distance < closestDistance)
+          {
+            closestDistance = distance;
+            closestEnemy = i;
+            socialDistancing = true;
+          }
+        }
+      
+    }
+    
+  }
+  if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
+    {
+      Enemy enemy2 = arrayEnemies.get(closestEnemy);
+      calculatedVector = calculateUnitVector(enemy2.pos, pos);
+    }
+  //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
+  }
+  return calculatedVector;
+}
+
+  void updateId(int id)
+  {
+    idNumber = id;
   }
 
   void newRandomPosition()
