@@ -14,7 +14,8 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       isPaused = false;
     }
   }
-  if ((key == 'h' || key == 'H') && gamePhase != Phase.STARTING) // Activar o desactivar el PAUSE
+  
+  if ((key == 'h' || key == 'H') && gamePhase != Phase.STARTING) //Activar o desactivar el PAUSE
   {
     if (!showControls)
     {
@@ -28,7 +29,8 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       showControls = false;
     }
   }
-  if ((key == 'r' || key == 'R') && gamePhase != Phase.STARTING) // Activar o desactivar el modo random
+  
+  if ((key == 'r' || key == 'R') && gamePhase != Phase.STARTING) //Activar o desactivar el modo random
   {
     if (!randomMode)
     {
@@ -38,20 +40,12 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       randomMode = false;
     }
   }
-  if ((key == 'v' || key == 'V') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  
+  if ((key == 'c' || key == 'C') && gamePhase != Phase.STARTING) // Hacer que la camara se centre en el mundo delimitado por el cubo
   {
-    if (!cameraFollowGoal)
-    {
-      cameraFollowGoal = true;
-      cameraPhase = CamPhase.GOAL;
-    } else if (cameraFollowGoal)
-    {
-      cameraFollowGoal = false;
-      cameraPhase = CamPhase.CENTERWORLD;
-    }
     updateCameraLookAt();
   }
-  //////////////////////////////////////////////////////////////////////////////
+  
   if ((key == '+') && gamePhase != Phase.STARTING)
   {
     if (selectedObjectType == ObjectType.AVATAR)
@@ -59,7 +53,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingCreated)
       {
         somethingCreated = true;
-        createAvatar(new PVector(0, 0, 0));
+        createAvatar(new PVector(0, 0, 0)); // --> Pestaña VirusFunctions
       }
     } else if (selectedObjectType == ObjectType.ENEMY)
     {
@@ -73,10 +67,11 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingCreated)
       {
         somethingCreated = true;
-        createFood();
+        createVulnerableCell();
       }
     }
   }
+  
   if ((key == '-') && gamePhase != Phase.STARTING)
   {
     if (selectedObjectType == ObjectType.AVATAR)
@@ -84,7 +79,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingErased)
       {
         somethingErased = true;
-        eraseAvatar(0);
+        eraseAvatar(0); //--> Pestaña VirusFuntions
       }
     } else if (selectedObjectType == ObjectType.ENEMY)
     {
@@ -98,10 +93,11 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingErased)
       {
         somethingErased = true;
-        eraseFood(0);
+        eraseVulnerableCell(0);
       }
     }
   }
+  
   if ((key == '0') && gamePhase != Phase.STARTING)
   {
     if (selectedObjectType == ObjectType.AVATAR)
@@ -116,18 +112,19 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingErased)
       {
         somethingErased = true;
-        arrayEnemies.clear();;
+        arrayEnemies.clear();
+        ;
       }
     } else if (selectedObjectType == ObjectType.FOOD)
     {
       if (!somethingErased)
       {
         somethingErased = true;
-        arrayFood.clear();
+        arrayVulnerableCell.clear();
       }
     }
   }
- 
+
   if ((key == ' ') && gamePhase != Phase.STARTING)
   {
     if (!changedSelectedObject)
@@ -146,6 +143,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     }
   }
 }
+
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
 {
   if ((key == '+') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta

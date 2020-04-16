@@ -1,4 +1,4 @@
-PVector calculateUnitVector(PVector pos1, PVector pos2)
+PVector calculateUnitVector(PVector pos1, PVector pos2) //Calcula un vector unitario entre dos posiciones recibidas como parámetro
 {
   PVector calculatedVector;
   calculatedVector = new PVector(0, 0, 0);
@@ -28,7 +28,7 @@ PVector calculateUnitVector(PVector pos1, PVector pos2)
   return calculatedVector;
 }
 
-PVector randomMovementDirection(PVector currentRandomPosition)
+PVector randomMovementDirection(PVector currentRandomPosition) //Define un movimiento aleatorio diferente al lider cada 3 segundos
 {
   PVector calculatedPosition;
   calculatedPosition = currentRandomPosition;
@@ -44,7 +44,7 @@ PVector randomMovementDirection(PVector currentRandomPosition)
   return calculatedPosition;
 }
 
-PVector calculateAvatarVector(int id)
+PVector calculateAvatarVector(int id) //Calcula el vector unitario entre la particula mas cercana dentro de su rango maximo
 {
   PVector calculatedVector;
   calculatedVector = new PVector(0.0, 0.0, 0.0);
@@ -72,6 +72,11 @@ PVector calculateAvatarVector(int id)
             closestDistance = distance;
             closestAvatar = i;
             socialDistancing = true;
+            if (avatar1.isCloseToLeader)
+            {
+              avatar1.isCloseToLeader = false;
+              avatar1.speedLimit = avatar1.nonLeaderSpeedLimit;
+            }
           }
         }
       }
@@ -83,6 +88,7 @@ PVector calculateAvatarVector(int id)
     if (vector!=0)
     {
       float distance = sqrt(vector);
+      
       if (distance < minimumGetAwayDistance)
       {
         if (distance < closestDistance)
@@ -90,13 +96,21 @@ PVector calculateAvatarVector(int id)
           closestDistance = distance;
           closestAvatar = 0;
           socialDistancing = true;
+
+          avatar1.isCloseToLeader = true;
+          avatar1.speedLimit = avatar1.leaderSpeedLimit;
         }
       }
     }
-    if (socialDistancing) // Solo hacemos que no se toquen si es que hay alguno que este suficientemente cerca
+
+    if (socialDistancing) //Solo hacemos que no se toquen si hay alguno que esté lo suficientemente cerca
     {
       avatar2 = arrayAvatar.get(closestAvatar);
       calculatedVector = calculateUnitVector(avatar2.pos, avatar1.pos);
+    } else if (avatar1.isCloseToLeader)
+    {
+      avatar1.isCloseToLeader = false;
+      avatar1.speedLimit = avatar1.nonLeaderSpeedLimit;
     }
   }
   //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
@@ -104,14 +118,14 @@ PVector calculateAvatarVector(int id)
   return calculatedVector;
 }
 
-PVector calculateFlockCenter() // Promedio entre todos los avatares
+PVector calculateFlockCenter() //Promedio entre todos los avatares
 {
   PVector calculatedPosition;
   calculatedPosition = new PVector(0.0, 0.0, 0.0);
 
   //Se suman las posiciones de todos los avatares
 
-  for (int i = arrayAvatar.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+  for (int i = arrayAvatar.size(); i-- > 0;) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
   {
     particula avatar = arrayAvatar.get(i);
     calculatedPosition.x += avatar.pos.x;
