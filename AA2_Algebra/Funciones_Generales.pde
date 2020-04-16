@@ -1,55 +1,18 @@
-void drawGoal() // pinta la meta
-{
-  pushMatrix();
-  translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
-  //rotateX(radians(-35.26));
-  //rotateY(radians(-45));
-  strokeWeight(2);
-  stroke(255, 215, 0);
-  fill(255, 0, 0);
-  box(goalSize);
-  popMatrix();
-}
-
-void drawWorldBoundaries() //Dibuja el cubo de los limites
-{
-  pushMatrix();
-  translate(0, 0, 0);
-  stroke(0, 255, 255);
-  sphere(20);
-  translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
-  //rotateX(radians(-35.26));
-  // rotateY(radians(-45));
-  stroke(0, 0, 255);
-  strokeWeight(5);
-  noFill();
-
-
-  box(worldBoundaryX, worldBoundaryY, worldBoundaryZ);  
-  popMatrix();
-}
-
-
 void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 {
-  pushMatrix();
-
   if (cameraPhase == CamPhase.GOAL)
   {
-    translate(posGoal.x, posGoal.y, posGoal.z);
-    applyMatrix(g3.camera);
-    cam.lookAt(0, 0, 0, animationTimeInMillis);
+    
+   // cam.lookAt(0, 0, 0, animationTimeInMillis);
+   cam.pan(posGoal.x, posGoal.y);
     //cam.lookAt(posGoal.x, posGoal.y, posGoal.z, animationTimeInMillis);
   } else if (cameraPhase == CamPhase.CENTERWORLD)
   {
-    translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
-    applyMatrix(g3.camera);
-    cam.lookAt(0, 0, 0, animationTimeInMillis);
-    //cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
+    
+    //cam.lookAt(500, 50,500, animationTimeInMillis);
+    cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
   }
-  popMatrix();
 }
-
 
 
 void collisionLeaderGoal() {  
@@ -120,16 +83,3 @@ PVector calculateRandomPosition() // Mueve la meta a una posicion random dentro 
 
   return calculatedPosition;
 }
-
-/*void isometricViewOn()
- {
- pushMatrix();
- translate(0,0,0);
- rotateX(radians(-35.26));
- rotateY(-45);
- }
- 
- void isometricViewOff()
- {
- popMatrix();
- }*/
