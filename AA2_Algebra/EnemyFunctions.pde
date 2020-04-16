@@ -7,7 +7,7 @@ void createEnemy() // Funcion que crea enemigos
     enemySize, 
     color(random(100, 255), 0, 0)
     ));
-    updateAllEnemiesIds();
+  updateAllEnemiesIds();
 }
 
 void enemyInteraction() // Funcion que controla el comportamiento del enemigo
