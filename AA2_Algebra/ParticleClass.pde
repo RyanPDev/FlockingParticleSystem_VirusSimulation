@@ -31,7 +31,7 @@ class particula {
     KM = random(0.2, 0.4);
     KB = 1-(KM+KL);
     KA = 2.0; // Constante que evita el choque (es muy alta pero es para priorizarla siempre ante las demas para evitar el choque)
-    KF = 1.0; //Intencion de food
+    KF = 1.5; //Intencion de food
 
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
