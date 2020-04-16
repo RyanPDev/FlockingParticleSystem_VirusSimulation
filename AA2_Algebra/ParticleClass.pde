@@ -6,7 +6,7 @@ class particula {
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
-  float mass, size, KL, KB, KM, KA, KR, radius; 
+  float mass, size, KL, KB, KM, KA, KR, KF; 
   color colorP;
   PVector randomMovementPosition;
   int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
@@ -21,7 +21,6 @@ class particula {
     vel = v;
     mass = m;
     size = t;
-    radius = size/2;
     colorP = c;
 
     //idNumber = id;
@@ -32,6 +31,7 @@ class particula {
     KM = random(0.2, 0.4);
     KB = 1-(KM+KL);
     KA = 2.0; // Constante que evita el choque (es muy alta pero es para priorizarla siempre ante las demas para evitar el choque)
+    KF = 1.5; //Intencion de food
 
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
@@ -42,13 +42,14 @@ class particula {
   {
 
     // 1- Fuerza y Aceleracion
-    PVector acel, goalVector, leaderVector, flockVector, getAwayVector, randomVector;
+    PVector acel, goalVector, leaderVector, flockVector, getAwayVector, randomVector, foodVector;
     acel = new PVector(0.0, 0.0, 0.0);
     goalVector = new PVector(0.0, 0.0, 0.0);
     leaderVector = new PVector(0.0, 0.0, 0.0);
     flockVector = new PVector(0.0, 0.0, 0.0);
     getAwayVector = new PVector(0.0, 0.0, 0.0);
     randomVector = new PVector(0.0, 0.0, 0.0);
+    foodVector = new PVector(0.0, 0.0, 0.0);
     //Si soy lider voy a la meta
 
 
@@ -78,11 +79,13 @@ class particula {
       flockVector = calculateUnitVector(pos, calculateFlockCenter()); //promedio de posiciones de avatares
 
       getAwayVector = calculateAvatarVector(idNumber);
+
+      foodVector = calculateNearFoodVector();
       // MEDIA PONDERADA
 
-      acel.x += KM * goalVector.x + KL * leaderVector.x + KB * flockVector.x + KA * getAwayVector.x;
-      acel.y += KM * goalVector.y + KL * leaderVector.y + KB * flockVector.y + KA * getAwayVector.y;
-      acel.z += KM * goalVector.z + KL * leaderVector.z + KB * flockVector.z + KA * getAwayVector.z;
+      acel.x += KM * goalVector.x + KL * leaderVector.x + KB * flockVector.x + KA * getAwayVector.x + KF * foodVector.x;
+      acel.y += KM * goalVector.y + KL * leaderVector.y + KB * flockVector.y + KA * getAwayVector.y + KF * foodVector.y;
+      acel.z += KM * goalVector.z + KL * leaderVector.z + KB * flockVector.z + KA * getAwayVector.z + KF * foodVector.z;
     }
     // NEWTON Suma Fuerzas = masa x Aceleracion
     acel.x /= mass;
@@ -157,8 +160,6 @@ class particula {
     }
   }
   
-  
-  
   void drawRandomDirection() // pinta la meta
   {
     pushMatrix();
@@ -178,7 +179,6 @@ class particula {
     {
       leader = 1;
       size = leaderSize;
-      radius = size/2;
       colorP = color (255, 255, 0);
       speedLimit = leaderSpeedLimit;
       KR = 0.25;
@@ -216,19 +216,54 @@ class particula {
       for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
       {
         Food food = arrayFood.get(i);
-        /*float vector = sq(pos.x - food.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
+        float vector = sq(food.pos.x - pos.x)+sq(food.pos.y - pos.y)+sq(food.pos.z - pos.z);
         if (vector!=0)
         {
           float distance = sqrt(vector);
-          if (distance < minimumGetAwayDistance)
+          if (distance <= size + food.size)
           {
-            pos = food.pos;
             eraseFood(i);
           }
         }
-        */
       }
     }
+  }
+
+  PVector calculateNearFoodVector()
+  {
+    PVector calculatedVector;
+    calculatedVector = new PVector(0.0, 0.0, 0.0);
+
+    int closestFood = 0;
+    float closestDistance = size * 10;
+    boolean socialDistancing = false;
+
+    //Se suman las posiciones de todos los avatares
+
+    for (int i = arrayFood.size(); i-- > 0; )
+    {
+      Food food = arrayFood.get(i);
+      float vector = sq(food.pos.x - pos.x)+sq(food.pos.y - pos.y)+sq(food.pos.z - pos.z);
+
+      if (vector!=0)
+      {
+        float distance = sqrt(vector);
+        if (distance < closestDistance)
+        {
+          closestDistance = distance;
+          closestFood = i;
+          socialDistancing = true;
+        }
+      }
+    }
+    
+    if (socialDistancing)
+    {
+      Food food = arrayFood.get(closestFood);
+      calculatedVector = calculateUnitVector(pos, food.pos);
+    }
+
+    return calculatedVector;
   }
 
   void drawParticle()

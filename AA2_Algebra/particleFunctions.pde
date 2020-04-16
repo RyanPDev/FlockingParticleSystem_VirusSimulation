@@ -25,7 +25,7 @@ void avatarInteraction() // Funcion que controla el comportamiento del enemigo
     if (gamePhase == Phase.SIMULATION)
     {
       avatar.move();
-      //avatar.collisionParticleFood(); // --> Pestaña Particula
+      avatar.collisionParticleFood(); // --> Pestaña Particula
     }
     avatar.drawParticle();
   }

@@ -4,13 +4,12 @@ class Food {
   color colorF;
   int idNumber;
 
-  Food(PVector p, float t, color c, int id) {
+  Food(PVector p, float t, color c, int id) {    
     pos = p;
     size = t;
     colorF = c;
     idNumber = id;
   }
-
 
   void drawFood()
   {

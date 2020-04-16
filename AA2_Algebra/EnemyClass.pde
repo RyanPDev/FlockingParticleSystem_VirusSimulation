@@ -25,7 +25,6 @@ class Enemy {
     idNumber = id;
     rotation = new PVector(35.26, -45, 0);
 
-
     KM = 1;
     KB = 2;
     KA = 4;

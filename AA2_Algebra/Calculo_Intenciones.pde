@@ -28,7 +28,6 @@ PVector calculateUnitVector(PVector pos1, PVector pos2)
   return calculatedVector;
 }
 
-
 PVector randomMovementDirection(PVector currentRandomPosition)
 {
   PVector calculatedPosition;
@@ -104,7 +103,6 @@ PVector calculateAvatarVector(int id)
 
   return calculatedVector;
 }
-
 
 PVector calculateFlockCenter() // Promedio entre todos los avatares
 {
