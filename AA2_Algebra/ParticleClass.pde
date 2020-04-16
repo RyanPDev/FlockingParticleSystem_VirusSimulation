@@ -6,7 +6,7 @@ class particula {
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
-  float mass, size, KL, KB, KM, KA, KR, KF, KE,rotation; 
+  float mass, size, KL, KB, KM, KA, KR, KF, KE, rotation; 
   boolean isInDanger = false;
   boolean isCloseToLeader = false;
   color colorP;
@@ -29,7 +29,7 @@ class particula {
     size = t;
     colorP = c;
     rotation = 0;
-    
+
     //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
     leader = 0; // No es lider al nacer 
     KL = random(0.3, 0.5);
@@ -59,9 +59,8 @@ class particula {
     randomVector = new PVector(0.0, 0.0, 0.0);
     foodVector = new PVector(0.0, 0.0, 0.0);
     enemyVector = new PVector(0.0, 0.0, 0.0);
-    //Si soy lider voy a la meta
 
-    
+
     if (leader==1)
     {
 
@@ -70,7 +69,7 @@ class particula {
       randomVector = calculateUnitVector(pos, randomMovementPosition);
       goalVector = calculateUnitVector(pos, posGoal);
       enemyVector = calculateNearEnemyVector();
-      if(!isInDanger)
+      if (!isInDanger)
         foodVector = calculateNearFoodVector();
       acel.x += KM * goalVector.x + KR * randomVector.x + KF * foodVector.x + KE * enemyVector.x;
       acel.y += KM * goalVector.y + KR * randomVector.y + KF * foodVector.x + KE * enemyVector.y;
@@ -87,10 +86,10 @@ class particula {
       flockVector = calculateUnitVector(pos, calculateFlockCenter()); //promedio de posiciones de avatares
 
       getAwayVector = calculateAvatarVector(idNumber);
-      
-      if(!isInDanger)
+
+      if (!isInDanger)
         foodVector = calculateNearFoodVector();
-      
+
       enemyVector = calculateNearEnemyVector();
       // MEDIA PONDERADA
 
@@ -210,7 +209,6 @@ class particula {
       KM = random(0, 1-KL);  // Meta
       KB = 1-(KM+KL); // Bandada
       randomConstantCurrentTime = millis();
-      
     }
   }
 
@@ -253,7 +251,7 @@ class particula {
       }
     }
   }
-  
+
   PVector calculateNearEnemyVector()
   {
     PVector calculatedVector;
@@ -266,51 +264,50 @@ class particula {
     boolean socialDistancing = false;
 
     //Se suman las posiciones de todos los avatares
-    if(arrayEnemies.size() != 0)
+    if (arrayEnemies.size() != 0)
     {
-    for (int i = arrayEnemies.size(); i-- > 0; )
-    {
-      Enemy enemy = arrayEnemies.get(i);
-      float vector = sq(enemy.pos.x - pos.x)+sq(enemy.pos.y - pos.y)+sq(enemy.pos.z - pos.z);
-
-      if (vector!=0)
+      for (int i = arrayEnemies.size(); i-- > 0; )
       {
-        float distance = sqrt(vector);
-        if (distance < enemyTrackingRange)
+        Enemy enemy = arrayEnemies.get(i);
+        float vector = sq(enemy.pos.x - pos.x)+sq(enemy.pos.y - pos.y)+sq(enemy.pos.z - pos.z);
+
+        if (vector!=0)
         {
-          if(!isInDanger)
-            KE = 0.5;
-          if (distance < closestDistance)
+          float distance = sqrt(vector);
+          if (distance < enemyTrackingRange)
           {
-            closestDistance = distance;
-            closestEnemy = i;
-            socialDistancing = true;
+            if (!isInDanger)
+              KE = 0.5;
+            if (distance < closestDistance)
+            {
+              closestDistance = distance;
+              closestEnemy = i;
+              socialDistancing = true;
+            }
+          }
+          if (distance < alarmingRange && !isInDanger)
+          {
+            isInDanger = true;
+            KE = 3;
           }
         }
-        if(distance < alarmingRange && !isInDanger)
-        {
-          isInDanger = true;
-          KE = 3;
-        }
       }
-    }
-    
-    if (socialDistancing)
-    {
-      Enemy enemy = arrayEnemies.get(closestEnemy);
-      calculatedVector = calculateUnitVector(enemy.pos, pos);
-    }
-    else if(isInDanger)
-    {
-      isInDanger = false;
-      KE = 0;
-    }
+
+      if (socialDistancing)
+      {
+        Enemy enemy = arrayEnemies.get(closestEnemy);
+        calculatedVector = calculateUnitVector(enemy.pos, pos);
+      } else if (isInDanger)
+      {
+        isInDanger = false;
+        KE = 0;
+      }
     }
 
     return calculatedVector;
   } 
-  
-  
+
+
   PVector calculateNearFoodVector()
   {
     PVector calculatedVector;
@@ -322,13 +319,13 @@ class particula {
     boolean socialDistancing = false;
 
     //Se suman las posiciones de todos los avatares
-    if(arrayFood.size() != 0)
+    if (arrayFood.size() != 0)
     {
       for (int i = arrayFood.size(); i-- > 0; )
       {
         Food food = arrayFood.get(i);
         float vector = sq(food.pos.x - pos.x)+sq(food.pos.y - pos.y)+sq(food.pos.z - pos.z);
-  
+
         if (vector!=0)
         {
           float distance = sqrt(vector);
@@ -343,7 +340,7 @@ class particula {
           }
         }
       }
-  
+
       if (socialDistancing)
       {
         Food food = arrayFood.get(closestFood);
@@ -353,20 +350,19 @@ class particula {
 
     return calculatedVector;
   }
-  
+
   void changeRotation()
   {
-   if (millis() - rotationCurrentTime >= rotationTimer)
+    if (millis() - rotationCurrentTime >= rotationTimer)
     {
       rotationCurrentTime = millis();
       rotation ++;
-      if(rotation >= 360)
+      if (rotation >= 360)
       {
-        
-         rotation = 0; 
+
+        rotation = 0;
       }
-      
-    } 
+    }
   }
 
 
@@ -386,49 +382,49 @@ class particula {
 
     sphere(size);
     strokeWeight(6);
-     //Eje X
-     stroke(colorP +100);
-     drawLines();
-     
-     pushMatrix();
-     rotateX(radians(90));
-     drawLines();
-     rotateX(radians(90));
-     drawLines();
-     rotateX(radians(90));
-     drawLines();
-     popMatrix();
-     
-     pushMatrix();
-     rotateY(radians(90));
-     drawLines();
-     rotateY(radians(90));
-     drawLines();
-     rotateY(radians(90));
-     drawLines();
-     popMatrix();
-     
-     pushMatrix();
-     rotateZ(radians(90));
-     drawLines();
-     rotateZ(radians(90));
-     drawLines();
-     rotateZ(radians(90));
-     drawLines();
-     popMatrix();
-     
-     
-     
+    //Eje X
+    stroke(colorP +100);
+    drawLines();
+
+    pushMatrix();
+    rotateX(radians(90));
+    drawLines();
+    rotateX(radians(90));
+    drawLines();
+    rotateX(radians(90));
+    drawLines();
+    popMatrix();
+
+    pushMatrix();
+    rotateY(radians(90));
+    drawLines();
+    rotateY(radians(90));
+    drawLines();
+    rotateY(radians(90));
+    drawLines();
+    popMatrix();
+
+    pushMatrix();
+    rotateZ(radians(90));
+    drawLines();
+    rotateZ(radians(90));
+    drawLines();
+    rotateZ(radians(90));
+    drawLines();
+    popMatrix();
+
+
+
     popMatrix();
   }
   void drawLines()
   {
-     line(0, 0, 0, spikyLength, 0, 0);
-     line(0, 0, 0, 0, -spikyLength, 0);
-     line(0, 0, 0, spikyLength, spikyLength, 0);
-     line(0, 0, 0, spikyLength, spikyLength, spikyLength);
-     line(0, 0, 0, 0, spikyLength, 0);
-     line(0, 0, 0, 0, spikyLength, spikyLength);
-     line(0, 0, 0, 0, 0, spikyLength);
+    line(0, 0, 0, spikyLength, 0, 0);
+    line(0, 0, 0, 0, -spikyLength, 0);
+    line(0, 0, 0, spikyLength, spikyLength, 0);
+    line(0, 0, 0, spikyLength, spikyLength, spikyLength);
+    line(0, 0, 0, 0, spikyLength, 0);
+    line(0, 0, 0, 0, spikyLength, spikyLength);
+    line(0, 0, 0, 0, 0, spikyLength);
   }
 }

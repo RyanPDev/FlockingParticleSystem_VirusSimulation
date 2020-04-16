@@ -6,8 +6,8 @@ import peasy.*;
 float inc_t;
 
 //Posiciones de la meta y el avatar lider
-//particula[] particulaArray = new particula[10];
-ArrayList<particula> arrayAvatar = new ArrayList(); // Lista de enemigos
+
+ArrayList<particula> arrayAvatar = new ArrayList(); // Lista de coronavirus
 
 boolean somethingCreated = false;
 boolean somethingErased = false;
@@ -17,10 +17,10 @@ PVector posGoal, posLeader;
 float leaderInitialSpeed;
 //xd
 
-ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de enemigos
+ArrayList<Enemy> arrayEnemies = new ArrayList(); // Lista de celulas inmunologicas
 
 
-ArrayList<Food> arrayFood = new ArrayList();
+ArrayList<Food> arrayFood = new ArrayList(); // Lista de celulas vulnerables
 boolean foodCreated = false;
 
 enum ObjectType {
@@ -126,7 +126,7 @@ void draw()
 {
   background(255);
   pushMatrix();
-  
+
   rotateX(radians(-35.26));
   rotateY(radians(-45));
 
