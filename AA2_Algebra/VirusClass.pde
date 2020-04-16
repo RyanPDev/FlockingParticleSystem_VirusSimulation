@@ -6,12 +6,16 @@ class particula {
   // KL = Seguimiento de lider; 
   // KB = Acercamiento a la bandada; 
   // KM = acercamiento a la meta
+  // KA = Para no chocar entre particulas iguales
+  // KE = Escapar de las particulas enemigas
+  // KR = Intención para el movimiento random (lider)
+  // KF = Para dirigirse a las celulas vulnerables y infectarlas
   float mass, size, KL, KB, KM, KA, KR, KF, KE, rotation; 
   boolean isInDanger = false;
   boolean isCloseToLeader = false;
   color colorP;
   PVector randomMovementPosition;
-  int leader; // Yo lo pondria booleano (1 si soy lider, 0 si no lo soy)
+  int leader; //1 si soy lider, 0 si no lo soy
   float nonLeaderSpeedLimit = 2.5;
   float speedLimit = nonLeaderSpeedLimit;
   float spikyLength;
@@ -30,7 +34,7 @@ class particula {
     colorP = c;
     rotation = 0;
 
-    //Estas 3 deberia de sumar 1 para que fuera fisicamente correcto (la suma de las K's da 1 (el 100%)
+    //la suma de las K's da 1 (el 100%)
     leader = 0; // No es lider al nacer 
     KL = random(0.3, 0.5);
     KM = random(0.2, 0.4);
@@ -41,14 +45,13 @@ class particula {
     spikyLength = size * 1.2; // Longitud de los "pinchitos" del coronavirus
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
-    randomConstantTotalTime = 5000; // 5 segundos
+    randomConstantTotalTime = 5000; //5 segundos
     rotationTimer = 0.5;
     rotationCurrentTime = 0;
   }
   // METODOS
   void move() //SOLVER (motor de inferencia numerica) Empleamos un EULER
   {
-
     // 1- Fuerza y Aceleracion
     PVector acel, goalVector, leaderVector, flockVector, getAwayVector, randomVector, foodVector, enemyVector;
     acel = new PVector(0.0, 0.0, 0.0);
@@ -63,7 +66,6 @@ class particula {
 
     if (leader==1)
     {
-
       randomMovementPosition = randomMovementDirection(randomMovementPosition);
 
       randomVector = calculateUnitVector(pos, randomMovementPosition);
@@ -74,23 +76,23 @@ class particula {
       acel.x += KM * goalVector.x + KR * randomVector.x + KF * foodVector.x + KE * enemyVector.x;
       acel.y += KM * goalVector.y + KR * randomVector.y + KF * foodVector.x + KE * enemyVector.y;
       acel.z += KM * goalVector.z + KR * randomVector.z + KF * foodVector.x + KE * enemyVector.z;
-    } else // sino voy a seguir al lider y a ir a la meta y no alejarme de la bandada
+    } else //Sino voy a seguir al lider y a ir a la meta y no alejarme de la bandada
     {
       if (randomMode)
         randomConstant(); // Randomiza las constantes de los bichos cada 3 segundos
 
-      goalVector = calculateUnitVector(pos, posGoal);
+      goalVector = calculateUnitVector(pos, posGoal); //--> Pestaña IntentionCalculation
 
-      leaderVector = calculateUnitVector(pos, posLeader);
+      leaderVector = calculateUnitVector(pos, posLeader); //--> Pestaña IntentionCalculation
 
-      flockVector = calculateUnitVector(pos, calculateFlockCenter()); //promedio de posiciones de avatares
+      flockVector = calculateUnitVector(pos, calculateFlockCenter()); //--> Pestaña IntentionCalculation
 
-      getAwayVector = calculateAvatarVector(idNumber);
+      getAwayVector = calculateAvatarVector(idNumber); //--> Pestaña IntentionCalculation
 
       if (!isInDanger)
         foodVector = calculateNearFoodVector();
 
-      enemyVector = calculateNearEnemyVector();
+      enemyVector = calculateNearEnemyVector(); 
       // MEDIA PONDERADA
 
       acel.x += KM * goalVector.x + KL * leaderVector.x + KB * flockVector.x + KA * getAwayVector.x + KF * foodVector.x + KE * enemyVector.x;
@@ -130,10 +132,7 @@ class particula {
       vel.z = -speedLimit;
     }
 
-    //println(pos_lider.x,pos_lider.y,pos_lider.z);
-
-
-    // 3- Posicion
+    // 3- Posicion; Se limita su posición dentro del mundo delimitado por el cubo
 
     pos.x = pos.x + vel.x * inc_t;
     pos.y = pos.y + vel.y * inc_t;
@@ -161,7 +160,7 @@ class particula {
       pos.z = 0 + size;
     }
 
-    //salvar posicion lider
+    //Salvar posicion lider
     if (leader == 1)
     {
       posLeader.x = pos.x;
@@ -170,7 +169,7 @@ class particula {
     }
   }
 
-  void drawRandomDirection() // pinta la meta
+  void drawRandomDirection() //Dibuja la meta en una posicion aleatorio
   {
     pushMatrix();
     translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
@@ -181,7 +180,7 @@ class particula {
     popMatrix();
   }
 
-  void turnIntoLeader()
+  void turnIntoLeader() //Convierte en lider a la particula
   {
     if (leader != 1)
     {
@@ -197,11 +196,13 @@ class particula {
       posLeader.z = pos.z;
     }
   }
-  void updateId(int id)
+  
+  void updateId(int id) //Actualiza el identificador de cada particula
   {
     idNumber = id;
   }
-  void randomConstant()
+  
+  void randomConstant() //Randomiza cada 5 segundos las intenciones de las particulas
   {
     if (millis() - randomConstantCurrentTime >= randomConstantTotalTime)
     {
@@ -212,27 +213,28 @@ class particula {
     }
   }
 
-  void collisionParticleFood()  
+  void collisionParticleFood() //Detecta la colision entre la particula y cada celula vulnerable
   {
-    if (arrayFood.size() != 0)
+    if (arrayVulnerableCell.size() != 0)
     {
-      for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
+      for (int i = arrayVulnerableCell.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
       {
-        Food food = arrayFood.get(i);
+        Food food = arrayVulnerableCell.get(i);
         float vector = sq(food.pos.x - pos.x)+sq(food.pos.y - pos.y)+sq(food.pos.z - pos.z);
         if (vector!=0)
         {
           float distance = sqrt(vector);
           if (distance <= size + food.size)
           {
-            createAvatar(food.pos);
-            eraseFood(i);
+            createAvatar(food.pos); // --> Pestaña VirusFunctions
+            eraseVulnerableCell(i);
           }
         }
       }
     }
   }
-  void collisionParticleEnemy()  
+  
+  void collisionParticleEnemy() //Detecta la colision entre la particula y las celulas immunologicas
   {
     if (arrayEnemies.size() != 0)
     {
@@ -245,14 +247,14 @@ class particula {
           float distance = sqrt(vector);
           if (distance <= size + enemy.size)
           {
-            eraseAvatar(idNumber);
+            eraseAvatar(idNumber); //--> Pestaña VirusFunctions
           }
         }
       }
     }
   }
 
-  PVector calculateNearEnemyVector()
+  PVector calculateNearEnemyVector() //Detecta si hay una celula immunologica dentro de su rango y devuelve su vector unitario
   {
     PVector calculatedVector;
     calculatedVector = new PVector(0.0, 0.0, 0.0);
@@ -296,7 +298,7 @@ class particula {
       if (socialDistancing)
       {
         Enemy enemy = arrayEnemies.get(closestEnemy);
-        calculatedVector = calculateUnitVector(enemy.pos, pos);
+        calculatedVector = calculateUnitVector(enemy.pos, pos); //--> Pestaña IntentionCalculation
       } else if (isInDanger)
       {
         isInDanger = false;
@@ -305,10 +307,9 @@ class particula {
     }
 
     return calculatedVector;
-  } 
+  }
 
-
-  PVector calculateNearFoodVector()
+  PVector calculateNearFoodVector() //Detecta si hay una celula vulnerable dentro de su rango y devuelve su vector unitario
   {
     PVector calculatedVector;
     calculatedVector = new PVector(0.0, 0.0, 0.0);
@@ -319,11 +320,11 @@ class particula {
     boolean socialDistancing = false;
 
     //Se suman las posiciones de todos los avatares
-    if (arrayFood.size() != 0)
+    if (arrayVulnerableCell.size() != 0)
     {
-      for (int i = arrayFood.size(); i-- > 0; )
+      for (int i = arrayVulnerableCell.size(); i-- > 0; )
       {
-        Food food = arrayFood.get(i);
+        Food food = arrayVulnerableCell.get(i);
         float vector = sq(food.pos.x - pos.x)+sq(food.pos.y - pos.y)+sq(food.pos.z - pos.z);
 
         if (vector!=0)
@@ -343,15 +344,15 @@ class particula {
 
       if (socialDistancing)
       {
-        Food food = arrayFood.get(closestFood);
-        calculatedVector = calculateUnitVector(pos, food.pos);
+        Food food = arrayVulnerableCell.get(closestFood);
+        calculatedVector = calculateUnitVector(pos, food.pos); //--> Pestaña IntentionCalculation
       }
     }
 
     return calculatedVector;
   }
 
-  void changeRotation()
+  void changeRotation() //Cada 0.5s actualiza la rotacion de la particula de virus
   {
     if (millis() - rotationCurrentTime >= rotationTimer)
     {
@@ -365,10 +366,8 @@ class particula {
     }
   }
 
-
-  void drawParticle()
+  void drawParticle() //Dibuja la particula
   {
-
     pushMatrix(); // Salvo el estado
 
     translate(pos.x, pos.y, pos.z);
@@ -413,11 +412,9 @@ class particula {
     drawLines();
     popMatrix();
 
-
-
     popMatrix();
   }
-  void drawLines()
+  void drawLines() //Dibuja las linias que salen de la particula de virus para que se parezca mas al coronavirus
   {
     line(0, 0, 0, spikyLength, 0, 0);
     line(0, 0, 0, 0, -spikyLength, 0);

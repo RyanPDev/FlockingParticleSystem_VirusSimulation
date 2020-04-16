@@ -11,7 +11,7 @@ class Food {
     idNumber = id;
   }
 
-  void drawFood()
+  void drawVulnerableCell() //Dibuja la particula
   {
     pushMatrix(); // Salvo el estado
 

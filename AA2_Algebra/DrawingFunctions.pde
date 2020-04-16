@@ -1,4 +1,4 @@
-void drawGoal() // pinta la meta
+void drawGoal() //Dibuja la meta
 {
   pushMatrix();
   translate(posGoal.x + (goalSize / 2), posGoal.y + (goalSize / 2), posGoal.z + (goalSize / 2));
@@ -11,7 +11,7 @@ void drawGoal() // pinta la meta
   popMatrix();
 }
 
-void drawWorldBoundaries() //Dibuja el cubo de los limites
+void drawWorldBoundaries() //Dibuja los limites del mundo de la simulación
 {
   pushMatrix();
   translate(0, 0, 0);
@@ -20,15 +20,15 @@ void drawWorldBoundaries() //Dibuja el cubo de los limites
   strokeWeight(5);
   noFill();
 
-
   box(worldBoundaryX, worldBoundaryY, worldBoundaryZ);  
   popMatrix();
 }
-void drawHUD() // Funcion que pone el mensaje
+
+void drawHUD() // Funcion que dibuja HUD
 {
 
   cam.beginHUD();
-  // now draw things that you want relative to the camera's position and orientation
+ 
   textSize(20);
   textAlign(LEFT);
   strokeWeight(1);
@@ -63,7 +63,6 @@ void drawHUD() // Funcion que pone el mensaje
     text(addingControlText, (width - 600), height - 100);
   }
 
-
   if (gamePhase == Phase.PAUSE)
   {
     textAlign(RIGHT);
@@ -80,33 +79,36 @@ void drawHUD() // Funcion que pone el mensaje
   textAlign(CENTER, CENTER);
 
   textSize(15); 
+  
   if (selectedObjectType == ObjectType.AVATAR)
   {
     textSize(22);
     fill(0, 255, 0);
   }
+  
   text("Corona Virus", (width - 100), height - 150);
   textSize(15);
   fill(0);
+  
   if (selectedObjectType == ObjectType.ENEMY)
   {
     textSize(22);
     fill(255, 0, 0);
   }
+  
   text("Immune Cells", (width - 100), height - 110);
   textSize(15);
   fill(0);
+  
   if (selectedObjectType == ObjectType.FOOD)
   {
     textSize(22);
     fill(255, 192, 203 );
   }
+  
   text("Vulnerable\nCells", (width - 100), height - 60);
   textSize(15);
   fill(0);
 
-
-
-
-  cam.endHUD(); // always!
+  cam.endHUD();// always!
 }
