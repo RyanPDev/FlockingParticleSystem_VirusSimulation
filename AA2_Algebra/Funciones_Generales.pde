@@ -1,16 +1,15 @@
 void updateCameraLookAt() // ACtualiza el modo de seguimiento de la camara
 {
-  if (cameraPhase == CamPhase.GOAL)
+ /* if (cameraPhase == CamPhase.GOAL)
   {
-    
-   // cam.lookAt(0, 0, 0, animationTimeInMillis);
-   cam.pan(posGoal.x, posGoal.y);
+    // cam.lookAt(0, 0, 0, animationTimeInMillis);
+    cam.pan(posGoal.x, posGoal.y);
     //cam.lookAt(posGoal.x, posGoal.y, posGoal.z, animationTimeInMillis);
-  } else if (cameraPhase == CamPhase.CENTERWORLD)
+  } else */
+  if (cameraPhase == CamPhase.CENTERWORLD)
   {
-    
     //cam.lookAt(500, 50,500, animationTimeInMillis);
-    cam.lookAt(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2, animationTimeInMillis);
+    cam.lookAt(-249.9062, 834.14703, 377.45096, 2600, animationTimeInMillis);
   }
 }
 
@@ -42,7 +41,17 @@ void collisionLeaderGoal() {
   {
     posGoal = calculateRandomPosition();
 
-    float borderDistance = goalSize *3;
+    checkIfGoalOutOfBounds();
+
+    if (cameraFollowGoal) // Si la camara deberia seguir a la meta
+    {
+      updateCameraLookAt();
+    }
+  }
+}
+void checkIfGoalOutOfBounds()
+{
+  float borderDistance = goalSize *3;
 
     if (posGoal.x > worldBoundaryX - borderDistance)
     {
@@ -65,12 +74,6 @@ void collisionLeaderGoal() {
     {
       posGoal.z = 0 + borderDistance;
     }
-
-    if (cameraFollowGoal) // Si la camara deberia seguir a la meta
-    {
-      updateCameraLookAt();
-    }
-  }
 }
 
 PVector calculateRandomPosition() // Mueve la meta a una posicion random dentro del cubo

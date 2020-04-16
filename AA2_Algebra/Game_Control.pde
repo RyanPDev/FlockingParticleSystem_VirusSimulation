@@ -38,17 +38,17 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       randomMode = false;
     }
   }
-  if ((key == 'v' || key == 'V') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
+  if ((key == 'c' || key == 'C') && gamePhase != Phase.STARTING) // Hacer que la camara siga o deje de seguir a la meta
   {
-    if (!cameraFollowGoal)
+    /*if (!cameraFollowGoal)
     {
       cameraFollowGoal = true;
       cameraPhase = CamPhase.GOAL;
     } else if (cameraFollowGoal)
-    {
-      cameraFollowGoal = false;
-      cameraPhase = CamPhase.CENTERWORLD;
-    }
+    {*/
+      //cameraFollowGoal = false;
+    //  cameraPhase = CamPhase.CENTERWORLD;
+    //}
     updateCameraLookAt();
   }
   //////////////////////////////////////////////////////////////////////////////
@@ -102,6 +102,15 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       }
     }
   }
+  /*if ((key == 'c') && gamePhase != Phase.STARTING)
+  {
+    println("distance: "+cam.getDistance());
+    float[] position = cam.getPosition();
+    
+    println("pòs: "+position[0]+" "+position[1]+" "+position[2]+"\n");
+    float[] rotations = cam.getRotations();
+    println("rot: "+rotations[0]+" "+rotations[1]+" "+rotations[2]+"\n");
+  }*/
   if ((key == '0') && gamePhase != Phase.STARTING)
   {
     if (selectedObjectType == ObjectType.AVATAR)
@@ -116,7 +125,8 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       if (!somethingErased)
       {
         somethingErased = true;
-        arrayEnemies.clear();;
+        arrayEnemies.clear();
+        ;
       }
     } else if (selectedObjectType == ObjectType.FOOD)
     {
@@ -127,7 +137,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       }
     }
   }
- 
+
   if ((key == ' ') && gamePhase != Phase.STARTING)
   {
     if (!changedSelectedObject)
