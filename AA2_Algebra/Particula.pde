@@ -156,7 +156,9 @@ class particula {
       posLeader.z = pos.z;
     }
   }
-
+  
+  
+  
   void drawRandomDirection() // pinta la meta
   {
     pushMatrix();
@@ -214,7 +216,7 @@ class particula {
       for (int i = arrayFood.size(); i-- > 0; ) //Se usa un bucle invertido porque sino no se pueden quitar objetos de la array list (cosas de processing)
       {
         Food food = arrayFood.get(i);
-        float vector = sq(avatar1.pos.x - avatar2.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
+        /*float vector = sq(pos.x - food.pos.x)+sq(avatar1.pos.y - avatar2.pos.y)+sq(avatar1.pos.z - avatar2.pos.z);
         if (vector!=0)
         {
           float distance = sqrt(vector);
@@ -224,6 +226,7 @@ class particula {
             eraseFood(i);
           }
         }
+        */
       }
     }
   }
