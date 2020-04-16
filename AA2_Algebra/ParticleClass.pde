@@ -38,7 +38,7 @@ class particula {
     KA = 2.0; // Constante que evita el choque (es muy alta pero es para priorizarla siempre ante las demas para evitar el choque)
     KF = 1.5; //Intencion de food
     KE = 0; // Intencion de escapar de enemigos
-    spikyLength = size * 1.2;
+    spikyLength = size * 1.2; // Longitud de los "pinchitos" del coronavirus
     randomMovementPosition = new PVector(0, 0, 0);
     randomConstantCurrentTime = 0;
     randomConstantTotalTime = 5000; // 5 segundos

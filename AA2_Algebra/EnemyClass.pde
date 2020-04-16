@@ -3,7 +3,7 @@ class Enemy {
 
   PVector pos, vel, rotation;
   int idNumber;
-  float mass, size, KM, KB, KA, minimumDistance; 
+  float mass, size, KM, KV, KA, minimumDistance; 
   color colorP;
   PVector randomMovementPosition;
 
@@ -21,9 +21,9 @@ class Enemy {
     colorP = c;
     rotation = new PVector(35.26, -45, 0);
 
-    KM = 1;
-    KB = 2;
-    KA = 4;
+    KM = 0.125;
+    KV = 0.25;
+    KA = 0.5;
 
     minimumDistance = size * 1.3;
 
@@ -53,9 +53,9 @@ class Enemy {
     //getAwayVector = calculateNearParticleVector();
     // MEDIA PONDERADA
 
-    acel.x += KM * randomVector.x + KB * particleVector.x + KA * getAwayVector.x;
-    acel.y += KM * randomVector.y + KB * particleVector.y + KA * getAwayVector.y;
-    acel.z += KM * randomVector.z + KB * particleVector.z + KA * getAwayVector.z;
+    acel.x += KM * randomVector.x + KV * particleVector.x + KA * getAwayVector.x;
+    acel.y += KM * randomVector.y + KV * particleVector.y + KA * getAwayVector.y;
+    acel.z += KM * randomVector.z + KV * particleVector.z + KA * getAwayVector.z;
 
 
     // NEWTON Suma Fuerzas = masa x Aceleracion
