@@ -12,7 +12,7 @@ void createAvatar(PVector position) // Funcion que crea avatares
     new PVector (random(-10.0, 10.0), random(-10.0, 10.0), random(-10.0, 10.0)), 
     1.0, 
     random(nonLeaderMinSize, nonLeaderMaxSize), 
-    color(0, random(100,255), 0))); 
+    color(0, random(100, 255), 0))); 
 
   updateAllAvatarIds(); //Esta funcion es clave para las Id's
 }
@@ -26,6 +26,7 @@ void avatarInteraction() // Funcion que controla el comportamiento del enemigo
     {
       avatar.move();
       avatar.collisionParticleFood(); // --> Pestaña Particula
+      avatar.collisionParticleEnemy();
     }
     avatar.drawParticle();
   }

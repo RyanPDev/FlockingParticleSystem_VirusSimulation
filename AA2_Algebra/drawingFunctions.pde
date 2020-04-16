@@ -15,8 +15,8 @@ void drawWorldBoundaries() //Dibuja el cubo de los limites
 {
   pushMatrix();
   translate(0, 0, 0);
-  stroke(0, 255, 255);
-  sphere(20);
+  //stroke(0, 255, 255);
+  //sphere(20);
   translate(worldBoundaryX/2, worldBoundaryY/2, worldBoundaryZ/2);
   //rotateX(radians(-35.26));
   // rotateY(radians(-45));
@@ -86,26 +86,26 @@ void drawHUD() // Funcion que pone el mensaje
   textSize(15); 
   if (selectedObjectType == ObjectType.AVATAR)
   {
-    textSize(35);
-    fill(0, 0, 255);
+    textSize(22);
+    fill(0, 255, 0);
   }
-  text("AVATAR", (width - 100), height - 150);
+  text("Corona Virus", (width - 100), height - 150);
   textSize(15);
   fill(0);
   if (selectedObjectType == ObjectType.ENEMY)
   {
-    textSize(35);
+    textSize(22);
     fill(255, 0, 0);
   }
-  text("ENEMY", (width - 100), height - 110);
+  text("Immune Cells", (width - 100), height - 110);
   textSize(15);
   fill(0);
   if (selectedObjectType == ObjectType.FOOD)
   {
-    textSize(35);
-    fill(0, 255, 0);
+    textSize(22);
+    fill(255, 192, 203 );
   }
-  text("FOOD", (width - 100), height - 70);
+  text("Vulnerable\nCells", (width - 100), height - 60);
   textSize(15);
   fill(0);
 

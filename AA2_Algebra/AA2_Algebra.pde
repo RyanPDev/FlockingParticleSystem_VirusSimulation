@@ -68,7 +68,7 @@ float leaderSize; // Tamaño del lider
 // Strings
 
 String showControlsText = "Press 'H' to show simulation controls";
-String simulationControlsText= "Press 'P' to Pause/Unpause\nPress 'V' to focus on the goal or back to default\nPress 'R' for Random Mode\nRandom mode->(Every 3 seconds, every avatar will behave differently)\n";
+String simulationControlsText= "Press 'P' to Pause/Unpause\nPress 'C' to re-center de camera view\nPress 'R' for Random Mode\nRandom mode->(Every 5 seconds, every virus will behave differently)\n";
 String addingControlText = "Press 'SPACE' to change the object selected\nPress '+' or '-' to add or delete something\ndepending on what you are selecting\nYou can also Press '0'(zero) to eliminate\neveryone of that type";
 String cameraControlsText= "\nDrag with Left Click to rotate camera\nSpin Mouse Wheel to Zoom\nPress Mouse Wheel and drag to move Camera                       -Press 'H' to hide controls-";
 //Zona de SetUp
@@ -84,7 +84,7 @@ void setup()
   worldBoundaryZ = 1500;
 
   // Cámara
-  cam = new PeasyCam(this, 2800);
+  cam = new PeasyCam(this, 50);
   cam.setMinimumDistance(50);
   cam.setMaximumDistance(2800);
 
@@ -106,6 +106,7 @@ void setup()
 
   posGoal = new PVector(0, 0, 0);
   posGoal = calculateRandomPosition(); // Posicion random para la meta
+  checkIfGoalOutOfBounds();
   posLeader = new PVector(0.0, 0.0, 0.0);
   inc_t = 0.4;
   updateCameraLookAt();
@@ -125,6 +126,7 @@ void draw()
 {
   background(255);
   pushMatrix();
+  
   rotateX(radians(-35.26));
   rotateY(radians(-45));
 

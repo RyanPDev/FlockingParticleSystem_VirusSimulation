@@ -72,6 +72,11 @@ PVector calculateAvatarVector(int id)
             closestDistance = distance;
             closestAvatar = i;
             socialDistancing = true;
+            if(avatar1.isCloseToLeader)
+            {
+              avatar1.isCloseToLeader = false;
+              avatar1.speedLimit = avatar1.nonLeaderSpeedLimit;
+            }
           }
         }
       }
@@ -90,6 +95,10 @@ PVector calculateAvatarVector(int id)
           closestDistance = distance;
           closestAvatar = 0;
           socialDistancing = true;
+          
+              avatar1.isCloseToLeader = true;
+              avatar1.speedLimit = avatar1.leaderSpeedLimit;
+          
         }
       }
     }
@@ -97,6 +106,11 @@ PVector calculateAvatarVector(int id)
     {
       avatar2 = arrayAvatar.get(closestAvatar);
       calculatedVector = calculateUnitVector(avatar2.pos, avatar1.pos);
+    }
+    else if(avatar1.isCloseToLeader)
+    {
+      avatar1.isCloseToLeader = false;
+      avatar1.speedLimit = avatar1.nonLeaderSpeedLimit;
     }
   }
   //Si un pajaro esta muy cerca de otro, este devolvera un vector en direccion contraria, si no hay ninguno, simplemente devuelve 0
