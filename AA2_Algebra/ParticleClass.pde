@@ -159,9 +159,7 @@ class particula {
       posLeader.z = pos.z;
     }
   }
-
-
-
+  
   void drawRandomDirection() // pinta la meta
   {
     pushMatrix();
@@ -181,7 +179,6 @@ class particula {
     {
       leader = 1;
       size = leaderSize;
-      radius = size/2;
       colorP = color (255, 255, 0);
       speedLimit = leaderSpeedLimit;
       KR = 0.25;
